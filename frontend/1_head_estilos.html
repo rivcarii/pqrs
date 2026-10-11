@@ -790,14 +790,12 @@ textarea.destello{animation:destello .9s var(--ease)}
 .cfg-fila.cfg-ent{grid-template-columns:130px minmax(0,1.2fr) minmax(0,1.4fr) 150px 110px 190px auto}
 .cfg-fila.cfg-cat{grid-template-columns:minmax(0,1.3fr) minmax(0,1.6fr) 100px 64px 110px 64px 120px 130px auto}
 /* acceso */
-.acceso-mascota{width:150px;align-self:flex-end;margin:-10px 10px -8px auto;filter:drop-shadow(0 10px 18px rgba(0,0,0,.25));animation:flotar 4.5s ease-in-out infinite}
 @keyframes flotar{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
 /* celebración y alarma */
 .toast.feliz .bola{background:var(--star-wash);color:#009C4D}.toast.feliz .tiempo{background:#009C4D}
 .confeti{position:fixed;inset:0;pointer-events:none;z-index:95;overflow:hidden}
 .confeti i{position:absolute;top:-20px;border-radius:2px;animation:caer linear forwards}
 @keyframes caer{to{transform:translateY(110vh) rotate(720deg);opacity:.9}}
-.confeti-mascota{position:absolute;bottom:-40px;right:24px;height:210px;animation:asomar 3.4s var(--ease) forwards}
 @keyframes asomar{0%{transform:translateY(100%)}18%,78%{transform:translateY(-30px)}100%{transform:translateY(110%)}}
 body.alarma::after,body.alarma-suave::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:94;box-shadow:inset 0 0 0 6px rgba(226,10,49,.85);animation:alarma .8s ease-in-out 4}
 body.alarma-suave::after{animation-iteration-count:2}
@@ -978,7 +976,7 @@ legend{font-family:var(--sans);font-size:12.5px;font-weight:600;letter-spacing:0
     linear-gradient(140deg,#004A63 0%,#006081 52%,#0A7EA2 100%);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 20px 44px rgba(0,71,95,.26)}
 .hero-saludo::after{border:0;border-radius:0;top:auto;left:auto;right:clamp(8px,1.4vw,22px);bottom:0;width:clamp(96px,11vw,150px);height:92%;
-  background:var(--mascota-hero,none) no-repeat right bottom/contain;filter:drop-shadow(0 12px 18px rgba(0,30,45,.35))}
+  background:none}
 .hero-saludo .f{font-size:13px;font-weight:600;opacity:.78;letter-spacing:.01em}
 .hero-saludo h2{font-size:clamp(24px,2.3vw,32px);letter-spacing:-.03em;margin:4px 0 10px}
 .hero-saludo p{font-size:14.5px;opacity:.9}
@@ -1105,7 +1103,6 @@ table.tb tr[data-cod]:hover td{background:var(--teal-wash-2)}
 .canal{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.18);border-radius:16px;font-weight:600;
   -webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);box-shadow:inset 0 1px 0 rgba(255,255,255,.12)}
 .canal .ic{color:#FEDC00}
-.acceso-mascota{width:clamp(130px,11vw,170px);filter:drop-shadow(0 18px 26px rgba(0,20,30,.35))}
 .acceso-pie{opacity:1;display:flex;flex-direction:column;gap:12px;font-size:12px;color:rgba(255,255,255,.62)}
 .acceso-pie .vigilado{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
 .acceso-pie .vigilado img{height:34px;width:auto}
@@ -1161,9 +1158,9 @@ table.tb tr[data-cod]:hover td{background:var(--teal-wash-2)}
 </style>
 <style>
 /* ===========================================================================
-   INGRESO · proporciones y mascota (v9.4)
-   Una sola pantalla en escritorio (sin desplazarse en 1366×768). A la izquierda: marca, un lema corto y la mascota de MiRed con las
-   letras P-Q-R-S girando alrededor. En celular y tableta el formulario va primero y la mascota se oculta.
+   INGRESO · proporciones y medalla (v9.4)
+   Una sola pantalla en escritorio (sin desplazarse en 1366×768). A la izquierda: marca, un lema corto y la medalla del SIAU con las
+   letras P-Q-R-S girando alrededor. En celular y tableta el formulario va primero y la medalla se oculta.
    =========================================================================== */
 .acceso{height:100vh;height:100dvh;min-height:560px;overflow:hidden}
 .acceso-marca{min-height:0;padding:clamp(20px,3.4vh,44px) clamp(28px,4vw,64px);justify-content:space-between;gap:10px}
@@ -1172,7 +1169,7 @@ table.tb tr[data-cod]:hover td{background:var(--teal-wash-2)}
 .acceso-marca h1{font-size:clamp(22px,2.3vw,34px);margin:6px 0 6px}
 .acceso-lema{margin:0;max-width:430px;font-size:clamp(13.5px,1.05vw,15.5px);line-height:1.5;color:rgba(255,255,255,.78)}
 .acceso-marca p.acceso-lema{opacity:1}
-.canales,.acceso-mascota{display:none}
+.canales{display:none}
 .acceso-hero{position:relative;z-index:1;flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
 .hero-caja{--hero-h:clamp(170px,min(44vh,calc(100vh - 430px)),420px);position:relative;flex:none;height:var(--hero-h);aspect-ratio:1/1;display:grid;place-items:center;margin-top:4px}
 .orbita{position:absolute;inset:0;pointer-events:none}
@@ -1191,8 +1188,8 @@ table.tb tr[data-cod]:hover td{background:var(--teal-wash-2)}
 .orb.o4 i{background:#1F6FD1}
 @keyframes orbitar{from{transform:translate(-50%,-50%) rotate(0)}to{transform:translate(-50%,-50%) rotate(360deg)}}
 @keyframes contra{from{transform:rotate(0)}to{transform:rotate(-360deg)}}
-/* La mascota conserva su proporción: solo se fija el alto, el ancho es automático */
-#mascotaHero{position:relative;z-index:2;height:calc(var(--hero-h) * .66);width:auto;max-width:none;aspect-ratio:auto;object-fit:contain;filter:drop-shadow(0 14px 20px rgba(0,20,30,.40))}
+/* La medalla azul del SIAU, sobre un disco blanco, es el centro de las órbitas */
+#medallaHero{position:relative;z-index:2;height:calc(var(--hero-h) * .5);width:calc(var(--hero-h) * .5);max-width:none;object-fit:contain;padding:calc(var(--hero-h) * .04);border-radius:50%;background:#fff;box-shadow:0 18px 36px rgba(0,20,30,.40),0 0 0 calc(var(--hero-h) * .02) rgba(255,255,255,.22)}
 .hero-pill{position:absolute;left:-4%;bottom:5%;transform:rotate(-3deg);background:#FEDC00;color:#2E2500;border-radius:14px;padding:8px 14px;
   font-weight:900;font-size:clamp(12px,1.9vh,15px);line-height:1.2;font-family:var(--display);box-shadow:0 10px 22px rgba(0,20,30,.30);white-space:nowrap}
 .hero-leyenda{flex:none;margin-top:6px;font-weight:500;font-size:12.5px;line-height:1.3;font-family:var(--sans);letter-spacing:.04em;color:rgba(255,255,255,.62);text-align:center}
@@ -1325,10 +1322,9 @@ table.tb tr[data-cod]:hover td{background:var(--teal-wash-2)}
 }
 </style>
 <!-- VENDOR qrcode-generator -->
-<!-- VENDOR imagenes -->
 <!-- VENDOR imagenes_marca -->
 <!-- VENDOR imagenes_siau -->
-<script>document.addEventListener("DOMContentLoaded", function(){ var m = document.getElementById("mascotaHero"); if(m && window.IMG_MASCOTA_SIAU) m.src = window.IMG_MASCOTA_SIAU; });</script>
+<script>document.addEventListener("DOMContentLoaded", function(){ var m = document.getElementById("medallaHero"); if(m && window.IMG_MEDALLA_AZUL) m.src = window.IMG_MEDALLA_AZUL; });</script>
 <script>
 /* v9 · marca: MiRed primero, Gestión de la Calidad después; blanco sobre fondo oscuro, color sobre fondo claro */
 document.addEventListener("DOMContentLoaded", function(){
@@ -1336,7 +1332,6 @@ document.addEventListener("DOMContentLoaded", function(){
   poner("logoAcceso", window.IMG_MIRED_B); poner("calidadAcceso", window.IMG_CALIDAD_B); poner("siauAcceso", window.IMG_SIAU_B);
   poner("ssAcceso", window.IMG_SS_B); poner("alcAcceso", window.IMG_ALC_B);
   poner("logo", window.IMG_MIRED); poner("logoCalidad", window.IMG_CALIDAD); poner("logoSiau", window.IMG_SIAU);
-  if(window.IMG_MASCOTA_HERO) document.documentElement.style.setProperty("--mascota-hero", "url(" + window.IMG_MASCOTA_HERO + ")");
 });
 </script>
 </head>

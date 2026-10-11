@@ -6,13 +6,6 @@ from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 R = pathlib.Path(__file__).resolve().parents[1]
 OUT = R / "assets" / "pwa"
-mas = Image.open(R / "assets" / "mascota" / "mascota_siau.png").convert("RGBA")
-busto = mas.crop((0, 0, mas.width, int(mas.height * 0.60)))               # cabeza, camiseta SIAU y megáfono
-_a = busto.split()[3]; _w, _h = busto.size                                  # el borde inferior se desvanece (sin corte seco)
-_g = Image.new("L", (_w, _h), 255); _gd = ImageDraw.Draw(_g)
-for _y in range(int(_h * .86), _h): _gd.line((0, _y, _w, _y), fill=int(255 * (1 - (_y - _h * .86) / (_h * .14))))
-from PIL import ImageChops
-busto.putalpha(ImageChops.multiply(_a, _g))
 FUENTE = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
 PLANETAS = [("P", "#7B4FB8", 205, 0.40), ("Q", "#E20A31", 318, 0.43), ("R", "#F29D00", 150, 0.46), ("S", "#1F6FD1", 28, 0.41)]   # color de cada tipo, ángulo, radio de órbita
 
@@ -40,17 +33,6 @@ def planeta(d, color, letra):
     dr.text(((n - (b[2] - b[0])) / 2 - b[0], (n - (b[3] - b[1])) / 2 - b[1] + n * .02), letra, font=f, fill="white")
     return base.resize((d, d), Image.LANCZOS)
 
-def sistema(lienzo, cx, cy, u, mascota_h):
-    """Dibuja órbitas, mascota y planetas. u = unidad (alto del lienzo cuadrado)."""
-    d = ImageDraw.Draw(lienzo, "RGBA")
-    for r in (0.36, 0.41, 0.46):
-        rr = r * u; d.ellipse((cx - rr, cy - rr, cx + rr, cy + rr), outline=(255, 255, 255, 48), width=max(1, int(u / 190)))
-    b = busto.resize((round(busto.width * mascota_h / busto.height), round(mascota_h)), Image.LANCZOS)   # sin deformar
-    lienzo.alpha_composite(b, (round(cx - b.width / 2), round(cy - b.height / 2 + u * 0.03)))
-    pd = round(u * 0.15)
-    for letra, color, ang, rad in PLANETAS:
-        px = cx + math.cos(math.radians(ang)) * rad * u; py = cy - math.sin(math.radians(ang)) * rad * u
-        lienzo.alpha_composite(planeta(pd, color, letra), (round(px - pd / 2), round(py - pd / 2)))
 
 MEDALLA = Image.open(R / "assets" / "siau" / "Medalla_SIAU_dorada.png").convert("RGBA")
 MEDALLA = MEDALLA.crop(MEDALLA.getbbox())

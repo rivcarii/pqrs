@@ -310,7 +310,7 @@ G.SESION = { usuario: "siau.admin", nombre: "Admin", rol: "Administrador", todas
 const rf = G.apiRadicar_({ descripcion: "Felicito a la doctora por su calidez.\n\nMuy amable todo el equipo.", fechaRecepcion: "2026-09-22", fechaRadicacion: "2026-09-22",
   tipoPqrs: "Felicitación", sede: sedes[0], servicio: "Urgencias", correo: "feliz@x.com" });
 const acF = G.__enviados.filter(e => e.para === "feliz@x.com" || (e.a || "") === "feliz@x.com").pop() || G.__enviados.find(e => /Gracias por su felicitación/.test(e.asunto));
-assert(acF && /Gracias por su felicitación/.test(acF.asunto) && /(&#9733;|cid:mascotaSiau)/.test(acF.html) && !/Fecha límite/.test(acF.html) && /Sus palabras/.test(acF.html), "acuse de felicitación con diseño propio y sin vencimiento");
+assert(acF && /Gracias por su felicitación/.test(acF.asunto) && /(&#9733;|cid:medallaFeli)/.test(acF.html) && !/Fecha límite/.test(acF.html) && /Sus palabras/.test(acF.html), "acuse de felicitación con diseño propio y sin vencimiento");
 assert((acF.html.match(/Muy amable todo el equipo/g) || []).length === 1 && /<p [^>]*>Muy amable todo el equipo/.test(acF.html), "las palabras del usuario conservan sus párrafos");
 const envF = G.apiEnviarAlArea_(rf.codigo, 1, "");
 const reco = G.__enviados.find(e => /^\[RECONOCIMIENTO/.test(e.asunto));

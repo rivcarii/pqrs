@@ -5,7 +5,7 @@ const SAL = path.join(__dirname, "salida");
 const gs = fs.readFileSync(path.join(__dirname, "..", "apps-script", "Codigo.gs"), "utf8");
 const img = n => (gs.match(new RegExp("var " + n + " = \"([^\"]*)\"")) || [])[1] || "";
 const CID = { logoNiRed: img("LOGO_BASE64"), logoMiredB: img("LOGO_MIRED_B_BASE64"), logoSiauB: img("LOGO_SIAU_B_BASE64"),
-              logoSiauC: img("LOGO_SIAU_BASE64"), medallaSiau: img("LOGO_SIAU_MEDALLA_BASE64"), mascotaSiau: img("MASCOTA_BASE64") };
+              logoSiauC: img("LOGO_SIAU_BASE64"), medallaSiau: img("LOGO_SIAU_MEDALLA_BASE64") };
 (async () => {
   const b = await chromium.launch(process.env.PW_CHROMIUM ? { executablePath: process.env.PW_CHROMIUM } : {});
   const lista = process.argv.slice(2).length ? process.argv.slice(2) : fs.readdirSync(SAL).filter(f => /^muestra_.*\.html$/.test(f));

@@ -46,7 +46,7 @@
     setTimeout(function(){ splash.classList.add("fuera"); setTimeout(function(){ splash.hidden = true; }, 700); }, falta);
   }
   if(splash){
-    var mi = el("splashMascota"); if(mi && window.IMG_MASCOTA_SIAU) mi.src = window.IMG_MASCOTA_SIAU;
+    var mi = el("splashMedalla"); if(mi && window.IMG_MEDALLA_AZUL) mi.src = window.IMG_MEDALLA_AZUL;
     var listo = function(){ var a = el("acceso"), p = el("app"); return (a && !a.hidden) || (p && !p.hidden); };
     if(listo()) ocultarSplash();   /* en el portal el ingreso puede aparecer antes de que cargue este script */
     else {

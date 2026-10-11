@@ -55,7 +55,7 @@ npx clasp create-deployment -d "v8"   # la primera vez; luego: npx clasp update-
 3. **Formulario QR**:
    - Formulario actual: en el Google Form ▸ Respuestas ▸ ⋮ ▸ **Seleccionar destino de las respuestas ▸ hoja existente ▸ este consolidado**. Google copia todas las respuestas antiguas, pero **solo se radican las posteriores al corte** (Config B20 = 23/09/2026 20:34:53, la última respuesta migrada). El mapeo de preguntas ya viene configurado.
    - O mejor: Configuración ▸ Código QR ▸ **Crear formulario nuevo** (incluye la autorización de tratamiento de datos, las 41 sedes y los servicios) y reemplaza el QR impreso.
-   - **Imprimir afiche**: genera el afiche A4 con el QR, la mascota del SIAU y el aviso de datos para las 40 sedes. **Descargar QR (PNG)** para piezas gráficas.
+   - **Imprimir afiche**: genera el afiche A4 con el QR, el logo del SIAU y el aviso de datos para las 40 sedes. **Descargar QR (PNG)** para piezas gráficas.
 4. **Áreas responsables**: completa el correo de cada área y sus reglas (servicios, sedes, palabras clave, correos en copia). Con eso la plataforma sugiere o direcciona sola.
 5. **Configuración ▸ Automatización**: webhook de Google Chat (aviso con sonido en el celular), correos que reciben todos los avisos, felicitaciones (resumen diario), direccionamiento automático.
 6. **Usuarios y sedes**: crea un usuario **Técnico** por cada técnico de sede con sus sedes asignadas ▸ **Invitar** (copia el mensaje con enlace y usuario para WhatsApp).

@@ -276,7 +276,7 @@ Mecánica común: los hilos de Gmail usan `reply`/`forward` con `_opcionesCorreo
 | 2 Direccionamiento | «Su solicitud está en trámite» | Solicitud interna (con prefijo de riesgo en el asunto y copias del directorio) |
 | 3 Respuesta | Respuesta formal (botón Redactar: `apiRedactarRespuesta_`) y cierre | — |
 | 4 Cierre | — | «Se respondió al usuario y el caso quedó cerrado» (`_avisoCierreArea_`) |
-| Felicitación | Solo acuse (con la mascota) | Reconocimiento (inmediato o resumen diario) |
+| Felicitación | Solo acuse (con la medalla del SIAU) | Reconocimiento (inmediato o resumen diario) |
 
 ### 10.6 Entes de control
 `Entidades_Correo` H = CATEGORÍA POR DEFECTO. Procuraduría, Personería, Defensoría, Contralorías, MinSalud, ICBF → REQUERIMIENTO ENTE DE CONTROL (10 días hábiles); juzgados (`@cendoj.ramajudicial.gov.co`) → TUTELA. Cada correo de un ente deja la traza «Correo de ente de control», que la plataforma convierte en alarma.

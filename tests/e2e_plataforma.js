@@ -14,10 +14,10 @@ require("fs").mkdirSync(CAP, { recursive: true });
     await p.goto(url);
     await p.waitForSelector("#formAcceso #a_usuario", { timeout: 20000 });
     await desb("acceso"); if (w === 1366 || w === 390) await p.screenshot({ path: CAP + `z_${w}_acceso.png` });
-    // v8.5 · la mascota del ingreso no se distorsiona y las 4 letras orbitan (cada una con su propia órbita)
+    // v8.5 · la medalla del ingreso (centro de las órbitas) no se distorsiona y las 4 letras orbitan (cada una con su propia órbita)
     if (w >= 1001) {
-      const m = await p.evaluate(() => { const i = document.getElementById("mascotaHero"), r = i.getBoundingClientRect(); return { nat: i.naturalWidth / i.naturalHeight, vis: r.width / r.height, orb: document.querySelectorAll(".orb").length, anim: getComputedStyle(document.querySelector(".orb.o1")).animationName }; });
-      if (Math.abs(m.nat - m.vis) > 0.02) errores.push(w + " la mascota del ingreso se deforma: natural " + m.nat + " vs visible " + m.vis);
+      const m = await p.evaluate(() => { const i = document.getElementById("medallaHero"), r = i.getBoundingClientRect(); return { nat: i.naturalWidth / i.naturalHeight, vis: r.width / r.height, orb: document.querySelectorAll(".orb").length, anim: getComputedStyle(document.querySelector(".orb.o1")).animationName }; });
+      if (Math.abs(m.nat - m.vis) > 0.02) errores.push(w + " la medalla del ingreso se deforma: natural " + m.nat + " vs visible " + m.vis);
       if (m.orb !== 4 || m.anim !== "orbitar") errores.push(w + " las órbitas P-Q-R-S no están animadas");
     }
     // v9.3 · el ingreso cabe en una pantalla: sin desplazarse en escritorio y con el botón visible en celular y tableta

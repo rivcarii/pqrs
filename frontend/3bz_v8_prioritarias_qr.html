@@ -221,18 +221,17 @@ $("btnQrPng").addEventListener("click", function(){
   descargarQrPng(t);
 });
 /* Ficha (afiche) del formulario QR · A4 · minimalista y con tipografía institucional: Volkswagen Serial (cuerpo) y Volkswagen Serial Black (títulos), con Barlow como respaldo.
-   Menos texto, la mascota de MiRed y mensajes simples. Se imprime o se guarda como PDF desde el navegador. */
+   Menos texto, el logo del SIAU y mensajes simples. Se imprime o se guarda como PDF desde el navegador. */
 function htmlAficheQR(t){
   var img = function(src, cls, alt){ return src ? '<img class="'+cls+'" src="'+src+'" alt="'+alt+'">' : ''; };
   var T = { p:"#7B4FB8", q:"#E20A31", r:"#F29D00", s:"#1F6FD1", f:"#009C4D" };   // colores de los tipos (paleta del sistema)
   var css =
     '@page{size:A4;margin:0}*{box-sizing:border-box}html,body{margin:0}body{font-family:"Volkswagen Serial","VW Serial",Barlow,"Segoe UI",Arial,sans-serif;color:#10222C;-webkit-print-color-adjust:exact;print-color-adjust:exact}'+
     '.hoja{width:210mm;height:296mm;position:relative;overflow:hidden;background:#fff;display:flex;flex-direction:column}'+
-    /* encabezado como el del formulario: degradado de la marca, logos, título y mascota */
+    /* encabezado como el del formulario: degradado de la marca, logos y título */
     '.cab{position:relative;flex:none;height:122mm;color:#fff;overflow:hidden;background:radial-gradient(120% 120% at 0% 0%,#0A7096 0%,#005A78 38%,#00475F 70%,#02503F 100%)}'+
     '.cab .aro{position:absolute;border-radius:50%;border:.3mm solid rgba(255,255,255,.16)}.aro.a1{width:118mm;height:118mm;right:-8mm;top:-6mm}.aro.a2{width:150mm;height:150mm;right:-30mm;top:10mm}'+
     '.cab .sol{position:absolute;border-radius:50%}.sol.roja{width:50mm;height:50mm;right:20mm;top:14mm;background:#C8102E}.sol.amar{width:9mm;height:9mm;right:11mm;top:74mm;background:#FEDC00}'+
-    '.cab .mas{position:absolute;right:15mm;bottom:3mm;height:108mm;width:auto}'+
     '.cab .izq{position:relative;z-index:2;padding:11mm 0 0 16mm;width:128mm}'+
     '.lockup{display:flex;align-items:center;gap:5mm}.lockup .mired{height:10mm}.lockup .calidad{height:12mm}.lockup .sep{width:.35mm;height:10mm;background:rgba(255,255,255,.35)}'+
     '.siau{height:21mm;display:block;margin-top:8mm}'+
@@ -266,7 +265,6 @@ function htmlAficheQR(t){
     '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;700;800&family=Barlow+Semi+Condensed:wght@800;900&display=block">'+
     '<style>'+css+'</style></head><body><button class="imprimir" onclick="(document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve()).then(function(){print()})">Imprimir o guardar como PDF</button><div class="hoja">'+
     '<div class="cab"><i class="aro a1"></i><i class="aro a2"></i><i class="sol roja"></i><i class="sol amar"></i>'+
-      img(window.IMG_MASCOTA_SIAU,"mas","Mascota del SIAU de MiRed IPS")+
       '<div class="izq"><div class="lockup">'+img(window.IMG_MIRED_B,"mired","MiRed IPS")+'<span class="sep"></span>'+img(window.IMG_CALIDAD_B,"calidad","Gestión de la Calidad")+'</div>'+
       img(window.IMG_SIAU_B,"siau","SIAU · Atención al Usuario")+
       '<h1>Opiniones<br>del usuario</h1><p class="sub">Tu voz mejora nuestra atención</p>'+
@@ -372,7 +370,6 @@ function celebrar(){
     p.style.transform = "rotate("+(Math.random()*360)+"deg)"; p.style.width = (6+Math.random()*6)+"px"; p.style.height = (8+Math.random()*8)+"px";
     capa.appendChild(p);
   }
-  if(window.IMG_MASCOTA){ var m = document.createElement("img"); m.src = IMG_MASCOTA; m.className = "confeti-mascota"; m.alt = ""; capa.appendChild(m); }
   document.body.appendChild(capa);
   setTimeout(function(){ if(capa.parentNode) capa.parentNode.removeChild(capa); }, 3600);
 }

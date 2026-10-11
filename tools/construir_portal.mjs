@@ -33,7 +33,7 @@ fs.writeFileSync(path.join(R, "portal", "index.html"), h);
 // que van a otro dominio) y busca primero en la red, así las actualizaciones llegan solas.
 const iconos = ["icon-192.png", "icon-512.png", "icon-maskable-512.png", "og.png"];
 iconos.forEach((f) => fs.copyFileSync(path.join(R, "assets", "pwa", f), path.join(R, "portal", f)));
-// favicon e ícono de iPhone con la mascota y las PQRS como planetas
+// favicon e ícono de iPhone con la medalla del SIAU y las PQRS como planetas
 fs.copyFileSync(path.join(R, "assets", "pwa", "apple-touch-icon.png"), path.join(R, "portal", "apple-touch-icon.png"));
 fs.copyFileSync(path.join(R, "assets", "pwa", "favicon.png"), path.join(R, "portal", "favicon.png"));
 fs.writeFileSync(path.join(R, "portal", "manifest.webmanifest"), JSON.stringify({

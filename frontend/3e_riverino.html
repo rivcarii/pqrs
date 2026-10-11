@@ -1,6 +1,6 @@
 <style>
 /* v9.3 · RIVERINO: guía de la plataforma (recorrido de bienvenida, consejos de primera vez y asistente que lleva a cada opción) */
-.rv-av{display:inline-block;flex:none;width:44px;height:44px;border-radius:50%;background-color:#fff;background-repeat:no-repeat;background-size:205% auto;background-position:26% 1%;border:2px solid var(--teal);box-shadow:0 2px 8px rgba(0,40,60,.22)}
+.rv-av{display:inline-block;flex:none;width:44px;height:44px;border-radius:50%;background-color:#fff;background-repeat:no-repeat;background-size:74% auto;background-position:center 55%;border:2px solid var(--teal);box-shadow:0 2px 8px rgba(0,40,60,.22)}
 #riverino{position:fixed;right:clamp(12px,2vw,22px);bottom:calc(clamp(12px,2vw,22px) + env(safe-area-inset-bottom,0px));z-index:58;display:flex;align-items:center;gap:8px;border:0;background:transparent;padding:0;cursor:pointer;font:inherit}
 #riverino .rv-av{width:56px;height:56px;border-width:3px;transition:transform .25s var(--ease)}
 #riverino:hover .rv-av,#riverino:focus-visible .rv-av{transform:scale(1.08) rotate(-4deg)}
@@ -146,7 +146,7 @@ html[data-form="movil"] .rv-tour{bottom:calc(86px + env(safe-area-inset-bottom,0
   function primerNombre(){ var n = (APP.sesion && APP.sesion.nombre) || APP.usuario || ""; return String(n).split(/\s+/)[0] || "equipo"; }
   function $$(id){ return document.getElementById(id); }
   function avatar(extra){ return '<span class="rv-av' + (extra ? " " + extra : "") + '" role="img" aria-label="Riverino"></span>'; }
-  function pintarAvatares(raiz){ if(!window.IMG_MASCOTA_SIAU) return; (raiz || document).querySelectorAll(".rv-av").forEach(function(a){ a.style.backgroundImage = "url(" + window.IMG_MASCOTA_SIAU + ")"; }); }
+  function pintarAvatares(raiz){ if(!window.IMG_MEDALLA_AZUL) return; (raiz || document).querySelectorAll(".rv-av").forEach(function(a){ a.style.backgroundImage = "url(" + window.IMG_MEDALLA_AZUL + ")"; }); }
   function permitido(e){ var p = (APP.sesion && APP.sesion.puede) || {}; return !e.p || !!p[e.p]; }
 
   /* ---------- resaltado ---------- */
