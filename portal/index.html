@@ -3652,7 +3652,7 @@ document.addEventListener("DOMContentLoaded", function(){
   poner("logo", window.IMG_MIRED); poner("logoCalidad", window.IMG_CALIDAD); poner("logoSiau", window.IMG_SIAU);
 });
 </script>
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src https://script.google.com https://script.googleusercontent.com; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src https://script.google.com https://script.googleusercontent.com; frame-src https://script.google.com https://*.googleusercontent.com; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="robots" content="noindex,nofollow">
 <meta name="theme-color" content="#006081">
@@ -4048,6 +4048,25 @@ html[data-tema="oscuro"] .hub-dato{color:var(--ink)}
 .hub-botones .b{width:100%}
 .hub-vacia{border:1.5px dashed var(--line-2);background:transparent;box-shadow:none}
 .hub-vacia .hub-ico{color:var(--ink-3)}
+/* 8 · Módulo abierto dentro de la plataforma */
+.mod-barra{display:flex;align-items:center;flex-wrap:wrap;gap:10px 14px;margin-bottom:12px}
+.mod-barra h2.vista{margin:0;font-size:20px}
+.mod-tabs{display:inline-flex;gap:2px;padding:3px;border-radius:999px;background:rgba(118,118,128,.14)}
+.mod-tabs:empty{display:none}
+.mod-tabs button{border:0;background:transparent;border-radius:999px;padding:7px 16px;min-height:34px;font:600 13px var(--sans);color:var(--ink-2);cursor:pointer;transition:background .18s var(--ease),color .18s var(--ease)}
+.mod-tabs button[aria-selected="true"]{background:var(--surface);color:var(--ink);box-shadow:0 2px 6px rgba(0,0,0,.12)}
+.mod-acciones{margin-left:auto;display:flex;gap:8px}
+.mod-marco{position:relative;height:calc(100dvh - 200px);min-height:520px;border-radius:var(--r-lg);overflow:hidden;background:var(--surface);border:1px solid var(--line);box-shadow:var(--sh-2)}
+.mod-marco iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:var(--surface)}
+.mod-carga{position:absolute;inset:0;z-index:1;display:grid;place-content:center;justify-items:center;gap:14px;background:var(--surface);color:var(--ink-3);font-size:13px;transition:opacity .3s var(--ease)}
+.mod-carga.fuera{opacity:0;pointer-events:none}
+.mod-ayuda{margin:10px 2px 0}
+html:not([data-form="movil"]) .mod-ayuda{padding-right:210px}   /* deja libre el botón flotante de Riverino */
+html[data-form="movil"] .mod-marco{height:calc(100dvh - 330px);min-height:420px}
+html[data-form="movil"] .mod-acciones{margin-left:0;width:100%}
+html[data-form="movil"] .mod-acciones .b{flex:1}
+@media(prefers-reduced-motion:reduce){.mod-carga{transition:none}}
+
 @media(max-width:420px){.hub-botones{grid-template-columns:minmax(0,1fr)}}
 </style>
 
@@ -4478,8 +4497,25 @@ html[data-tema="oscuro"] .hub-dato{color:var(--ink)}
   <!-- ===================== MÓDULOS (inicio general, solo administradores) ===================== -->
   <section id="v-hub" hidden>
     <div class="cab-vista"><div><h2 class="vista">Módulos</h2>
-      <p class="sub">Todo el SIAU en un solo lugar: cada tarjeta abre su módulo. Los externos se abren en otra pestaña, con sus propios accesos.</p></div></div>
+      <p class="sub">Todo el SIAU en un solo lugar: cada tarjeta abre su módulo aquí mismo, sin salir de la plataforma.</p></div></div>
     <div id="hubCuerpo"></div>
+  </section>
+
+  <!-- ===================== MÓDULO ABIERTO (marco de un proyecto propio, solo administradores) ===================== -->
+  <section id="v-modulo" hidden>
+    <div class="mod-barra">
+      <button class="b fant mini" id="btnModVolver" type="button"><svg class="ic s"><use href="#i-flecha"/></svg>Módulos</button>
+      <h2 class="vista" id="modTitulo">Módulo</h2>
+      <div class="mod-tabs" id="modTabs" role="tablist"></div>
+      <span class="mod-acciones">
+        <button class="b sec mini" id="btnModRecargar" type="button"><svg class="ic s"><use href="#i-actualizar"/></svg>Recargar</button>
+        <a class="b sec mini" id="btnModPestana" href="#" target="_blank" rel="noopener noreferrer"><svg class="ic s"><use href="#i-externo"/></svg>Otra pestaña</a>
+      </span>
+    </div>
+    <div class="mod-marco" id="modMarco">
+      <div class="mod-carga" id="modCarga"><span class="solar"><span class="nucleo"></span><b></b><b></b></span><span>Abriendo el módulo…</span></div>
+    </div>
+    <p class="hint mod-ayuda">Si aquí aparece un aviso de acceso o queda en blanco, usa «Otra pestaña» y revisa que la implementación del módulo esté en «Ejecutar como: yo» y «Cualquier persona».</p>
   </section>
 
   <!-- ===================== CONFIGURACIÓN ===================== -->
@@ -4602,7 +4638,7 @@ html[data-tema="oscuro"] .hub-dato{color:var(--ink)}
     <div class="card">
       <div id="cfgAviso"></div>
       <fieldset><legend>Módulos externos</legend>
-        <p class="sub" style="margin:0 0 12px">Los módulos que viven en otro proyecto (y otra cuenta de Google) solo se enlazan desde Módulos: no se comparten datos ni sesiones.</p>
+        <p class="sub" style="margin:0 0 12px">Los módulos que viven en otro proyecto de Apps Script se abren dentro de la plataforma desde Módulos, en un marco aparte: no se comparten datos ni sesiones. Puedes pegar la dirección común o la de dominio (/a/miredips.org/…).</p>
         <label for="segUrl">Seguimiento SIAU · dirección de la aplicación web (termina en /exec)</label>
         <input id="segUrl" spellcheck="false" autocomplete="off">
         <div class="acciones"><button class="b pri" id="btnSegGuardar" type="button"><svg class="ic s"><use href="#i-check"/></svg>Guardar dirección</button>
@@ -4788,7 +4824,7 @@ function animarNumeros(raiz){ (raiz||document).querySelectorAll("[data-n]").forE
 /* ============================ navegación ============================ */
 var TITULOS = { inicio:["Inicio","Resumen de tus sedes"], bandeja:["Bandeja de PQRS","Gestión por etapas"], prioritarias:["Prioritarias","Riesgo vital, priorizadas y términos cortos"], correo:["Correo y EPS","Canal de correo unificado"],
   detalle:["Detalle de la PQRS","Gestión y trazabilidad"], radicar:["Radicar PQRS","Ventanilla, buzón y teléfono"], ficha:["Ficha del formulario","Para imprimir y ubicar en tu sede"], tablero:["Tablero","Indicadores por mes y sede"],
-  responsables:["Directorio de áreas","Quién recibe cada solicitud"], hub:["Módulos","Todo el SIAU en un solo lugar"], usuarios:["Usuarios y sedes","Accesos a la plataforma"], config:["Configuración","Automatización y canales"] };
+  responsables:["Directorio de áreas","Quién recibe cada solicitud"], hub:["Módulos","Todo el SIAU en un solo lugar"], modulo:["Módulo","Se ejecuta dentro de la plataforma"], usuarios:["Usuarios y sedes","Accesos a la plataforma"], config:["Configuración","Automatización y canales"] };
 /* Pastilla que se desliza hasta el apartado activo del menú (movimiento en lugar de saltos). */
 function moverPastilla(){
   var menu = $("menu"); if(!menu) return;
@@ -4802,15 +4838,16 @@ window.addEventListener("resize", function(){ moverPastilla(); });
 function ver(v){
   var permitido = document.querySelector('#menu [data-v="'+v+'"]');
   if(permitido && permitido.hidden) v = "inicio";
+  if(v === "modulo" && !(APP.sesion && APP.sesion.puede && APP.sesion.puede.admin)) v = "inicio";   /* los módulos propios solo son del administrador */
   if(TITULOS[v]){ $("tituloVista").textContent = TITULOS[v][0]; $("subVista").textContent = TITULOS[v][1]; }
   cerrarLateral();
-  ["inicio","bandeja","prioritarias","correo","detalle","radicar","ficha","tablero","responsables","hub","usuarios","config"].forEach(function(x){
+  ["inicio","bandeja","prioritarias","correo","detalle","radicar","ficha","tablero","responsables","hub","modulo","usuarios","config"].forEach(function(x){
     var s=$("v-"+x); if(!s) return;
     s.hidden = (x!==v);
     if(x===v){ s.classList.remove("anim"); void s.offsetWidth; s.classList.add("anim"); }
   });
   document.querySelectorAll("nav button[data-v]").forEach(function(b){
-    b.classList.toggle("on", b.dataset.v===v || (v==="detalle" && b.dataset.v==="bandeja"));
+    b.classList.toggle("on", b.dataset.v===v || (v==="detalle" && b.dataset.v==="bandeja") || (v==="modulo" && b.dataset.v==="hub"));
   });
   $("menuPerfil").hidden = true;
   $("centro").hidden = true;
@@ -6847,7 +6884,7 @@ function activarVerClave(raiz){
     b.addEventListener("click", function(){ var i=$(b.dataset.verClave); i.type = i.type==="password" ? "text" : "password"; });
   });
 }
-var FRONT_VERSION = "9.9";
+var FRONT_VERSION = "9.10";
 function pintarVersion(estado){
   var el = $("accVersion");
   if(!el){ el = document.createElement("div"); el.id = "accVersion"; el.className = "hint"; el.style.cssText = "text-align:center;margin-top:10px;font-size:12px";
@@ -6950,6 +6987,7 @@ var ARRANQUE_HTML = $("arranque").innerHTML;
 function limpiarApp(){
   if(CICLO){ clearInterval(CICLO); CICLO = null; }
   try { if(window.riverinoCerrar) window.riverinoCerrar(); } catch(e) {}
+  try { cerrarMarcoModulo(); } catch(e) {}   /* el módulo propio deja de ejecutarse al cerrar sesión */
   APP = JSON.parse(APP_INICIAL);
   $("menuPerfil").hidden = true; $("centro").hidden = true; cerrarModal(); cerrarLateral();
   $("toasts").innerHTML = ""; $("centroLista").innerHTML = ""; $("campanaN").hidden = true;
@@ -7040,22 +7078,25 @@ $("btnEscritorio").addEventListener("click", function(){
 
 /* ============================ USUARIOS ============================ */
 /* ============================ MÓDULOS · INICIO GENERAL (solo administradores) ============================
-   Cada módulo es una entrada de MODULOS. Los internos viven en esta plataforma (se abren con ver()); los externos son otros proyectos, a veces en
-   otra cuenta de Google: aquí solo se ENLAZAN (se abren en otra pestaña, con sus propios accesos). No se incrustan ni se comparten datos.
-   Para sumar un módulo: una entrada aquí, y si es externo, su dirección desde el servidor (apiSeguimiento es el ejemplo). */
+   Cada módulo es una entrada de MODULOS. «interno»: vive en esta plataforma (se abre con ver()). «embebido»: otro proyecto de Apps Script del mismo dueño
+   que se EJECUTA DENTRO de la plataforma, en un marco (iframe) aislado con sandbox: su código, su hoja y sus accesos siguen siendo suyos; aquí solo se
+   muestra. Para sumar un proyecto: una entrada aquí, su dirección desde el servidor solo para administradores (apiSeguimiento es el ejemplo) y, si es
+   nuevo, su entrada en KB de Riverino. */
 var MODULOS = [
   { id:"pqrs", nombre:"Sistema de PQRS", icono:"bandeja", tipo:"interno", insignia:"En esta plataforma", destino:"inicio", boton:"Abrir PQRS",
     desc:"Peticiones, quejas, reclamos, sugerencias y felicitaciones: radicar, direccionar, responder y vigilar los términos." },
-  { id:"seguimiento", nombre:"Seguimiento SIAU", icono:"camara", tipo:"externo", perm:"admin", insignia:"Se abre en otra pestaña", api:"apiSeguimiento",
-    desc:"Evidencias del SIAU y de la Asociación de Usuarios: cumplimiento de cada sede, fototeca, personal y rotación." }
+  { id:"seguimiento", nombre:"Seguimiento SIAU", icono:"camara", tipo:"embebido", perm:"admin", insignia:"Se ejecuta aquí", api:"apiSeguimiento",
+    desc:"Evidencias del SIAU y de la Asociación de Usuarios: cumplimiento de cada sede, fototeca, personal y rotación.",
+    vistas:[ { k:"visor", t:"Visor", url:"visorEmbed", ext:"visor" }, { k:"admin", t:"Administrador", url:"adminEmbed", ext:"admin" } ] }
 ];
+var MOD_DATOS = {};   /* direcciones ya recibidas del servidor, por módulo */
 function cargarHub(){
   var p = (APP.sesion && APP.sesion.puede) || {};
   var visibles = MODULOS.filter(function(m){ return !m.perm || p[m.perm]; });
   var tarjeta = function(m){
     var pie = m.tipo === "interno"
       ? '<button class="b pri" type="button" data-hub-ir="'+esc(m.destino)+'">'+ic("flecha","s")+esc(m.boton)+'</button>'
-      : '<div class="hub-botones" data-hub-enlaces="'+esc(m.id)+'"><span class="b sec" aria-busy="true">Cargando enlaces…</span></div>';
+      : '<div class="hub-botones" data-hub-enlaces="'+esc(m.id)+'"><span class="b sec" aria-busy="true">Cargando…</span></div>';
     return '<article class="card hub-card" data-modulo="'+esc(m.id)+'"><div class="hub-cab"><span class="hub-ico">'+ic(m.icono)+'</span><span class="hub-ins">'+esc(m.insignia)+'</span></div>'+
       '<h3>'+esc(m.nombre)+'</h3><p class="hub-desc">'+esc(m.desc)+'</p><p class="hub-dato" data-hub-dato="'+esc(m.id)+'"></p><div class="hub-pie">'+pie+'</div></article>';
   };
@@ -7068,16 +7109,53 @@ function cargarHub(){
     var d = document.querySelector('[data-hub-dato="pqrs"]'); if(!d || !r) return;
     d.textContent = (r.sinDireccionar||0)+" sin direccionar · "+(r.vencidas||0)+" vencidas · "+(r.prioritariasAbiertas||0)+" prioritarias";
   }).catch(function(){});
-  /* Externos: la dirección la entrega el servidor solo al administrador */
-  visibles.filter(function(m){ return m.tipo === "externo"; }).forEach(function(m){
+  /* Módulos propios: la dirección la entrega el servidor solo al administrador */
+  visibles.filter(function(m){ return m.tipo === "embebido"; }).forEach(function(m){
     srvSilencioso(m.api).then(function(r){
       var c = document.querySelector('[data-hub-enlaces="'+m.id+'"]'); if(!c) return;
-      if(!r || r.ok === false){ c.innerHTML = '<span class="hint">'+esc((r && r.mensaje) || "No se pudo cargar el enlace.")+'</span>'; return; }
-      c.innerHTML = '<a class="b pri" href="'+esc(r.visor)+'" target="_blank" rel="noopener noreferrer">'+ic("externo","s")+'Abrir el visor</a>'+
-        '<a class="b sec" href="'+esc(r.admin)+'" target="_blank" rel="noopener noreferrer">'+ic("externo","s")+'Administrador</a>';
+      if(!r || r.ok === false){ c.innerHTML = '<span class="hint">'+esc((r && r.mensaje) || "No se pudo cargar el módulo.")+'</span>'; return; }
+      MOD_DATOS[m.id] = r;
+      c.innerHTML = m.vistas.map(function(v, i){ return '<button class="b '+(i===0?'pri':'sec')+'" type="button" data-hub-abrir="'+esc(m.id)+'" data-vista="'+esc(v.k)+'">'+ic("flecha","s")+(i===0?"Abrir el "+v.t.toLowerCase():v.t)+'</button>'; }).join("");
+      c.querySelectorAll("[data-hub-abrir]").forEach(function(b){ b.addEventListener("click", function(){ abrirModulo(m.id, b.dataset.vista); }); });
     }).catch(function(e){ var c = document.querySelector('[data-hub-enlaces="'+m.id+'"]'); if(c) c.innerHTML = '<span class="hint">'+msgErr(e)+'</span>'; });
   });
 }
+/* Abre un módulo propio dentro de la plataforma: marco aislado (sandbox), sin permiso para cambiar la página principal. */
+function abrirModulo(id, vista){
+  var m = MODULOS.filter(function(x){ return x.id === id; })[0], d = MOD_DATOS[id]; if(!m || !d) return;
+  var v = m.vistas.filter(function(x){ return x.k === vista; })[0] || m.vistas[0];
+  APP.modulo = { id:id, k:v.k };
+  ver("modulo"); $("tituloVista").textContent = m.nombre; $("subVista").textContent = "Se ejecuta dentro de la plataforma";
+  $("modTitulo").textContent = m.nombre;
+  $("modTabs").innerHTML = m.vistas.length > 1 ? m.vistas.map(function(x){ return '<button type="button" role="tab" aria-selected="'+(x.k===v.k)+'" data-mod-vista="'+esc(x.k)+'">'+esc(x.t)+'</button>'; }).join("") : "";
+  $("modTabs").querySelectorAll("[data-mod-vista]").forEach(function(b){ b.addEventListener("click", function(){ abrirModulo(id, b.dataset.modVista); }); });
+  ponerMarco(d[v.url], d[v.ext]);
+}
+function ponerMarco(src, ext){
+  if(!/^https:\/\/script\.google\.com\//.test(String(src))) return;   /* solo Apps Script */
+  var marco = $("modMarco"), f = $("modFrame");
+  if(!f){
+    f = document.createElement("iframe"); f.id = "modFrame"; f.title = "Módulo";
+    f.setAttribute("sandbox", "allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox allow-downloads allow-modals");
+    f.setAttribute("referrerpolicy", "no-referrer");
+    f.addEventListener("load", function(){ $("modCarga").classList.add("fuera"); });
+    marco.appendChild(f);
+  }
+  if(f.dataset.src !== src){ $("modCarga").classList.remove("fuera"); f.dataset.src = src; f.src = src; }
+  $("btnModPestana").href = String(ext).indexOf("https://script.google.com/") === 0 ? ext : src;
+}
+function cerrarMarcoModulo(){
+  var f = $("modFrame"); if(f && f.parentNode) f.parentNode.removeChild(f);
+  if($("modCarga")) $("modCarga").classList.remove("fuera");
+  MOD_DATOS = {};
+}
+(function(){
+  var volver = $("btnModVolver"), rec = $("btnModRecargar");
+  if(volver) volver.addEventListener("click", function(){ ver("hub"); });
+  if(rec) rec.addEventListener("click", function(){
+    var f = $("modFrame"); if(!f) return; var s = f.dataset.src; $("modCarga").classList.remove("fuera"); f.src = "about:blank"; setTimeout(function(){ f.src = s; }, 60);
+  });
+})();
 /* Configuración ▸ Módulos externos: dirección de Seguimiento SIAU */
 function cargarModulosExternos(){
   srvSilencioso("apiSeguimiento").then(function(r){ if(r && r.visor && $("segUrl")) $("segUrl").value = r.visor; }).catch(function(){});
@@ -7581,7 +7659,7 @@ html[data-form="movil"] .rv-tour{bottom:calc(86px + env(safe-area-inset-bottom,0
     { t:"Cómo configuro las áreas responsables", v:"responsables", p:"admin", k:"directorio areas responsables reglas direccionamiento servicios palabras clave copias correo jefe",
       d:"<p>El <b>Directorio de áreas</b> define quién recibe cada solicitud: servicios, sedes, palabras clave y correos en copia. Entre más completo esté, mejores serán las sugerencias de direccionamiento.</p>" },
     { t:"Qué es la pantalla de Módulos", v:"hub", p:"admin", k:"modulos modulo inicio general tarjetas seguimiento siau evidencias asociacion usuarios plataforma abrir integrar un solo lugar fototeca cumplimiento",
-      d:"<p><b>Módulos</b> es el inicio general del administrador: una tarjeta por módulo. <b>Sistema de PQRS</b> se abre aquí mismo; <b>Seguimiento SIAU</b> (evidencias y cumplimiento de las sedes) es otra plataforma, con otra cuenta de Google, y se abre en una pestaña nueva con sus propios accesos. Los módulos nuevos aparecerán como tarjetas.</p>" },
+      d:"<p><b>Módulos</b> es el inicio general del administrador: una tarjeta por módulo. <b>Sistema de PQRS</b> se abre aquí mismo; <b>Seguimiento SIAU</b> (evidencias y cumplimiento de las sedes) es otro proyecto tuyo (evidencias y cumplimiento de las sedes) y se ejecuta dentro de la plataforma, en su propio marco y con sus propios accesos; también puedes abrirlo en otra pestaña. Los módulos nuevos aparecerán como tarjetas.</p>" },
     { t:"Qué se configura en Configuración", v:"config", p:"admin", k:"configuracion automatizacion avisos google chat push ntfy whatsapp respaldo entidades categorias qr ajustes",
       d:"<p><b>Configuración</b> reúne la automatización del correo (EPS, entes, usuarios, citas), los avisos por Google Chat y push, el WhatsApp, el respaldo diario en Drive y la tabla de entidades y categorías.</p>" },
     { t:"Cómo cambio mi contraseña o el tema", v:"inicio", sel:"#btnPerfil", k:"contrasena clave cambiar password tema oscuro claro apariencia instalar app celular cerrar sesion perfil salir",
@@ -7609,7 +7687,7 @@ html[data-form="movil"] .rv-tour{bottom:calc(86px + env(safe-area-inset-bottom,0
     tablero:["Los números de tus sedes","Cambia de mes o de año y descarga el Excel de indicadores cuando lo necesites."],
     responsables:["Quién recibe qué","Entre más completo el directorio, mejor se sugiere el área al direccionar."],
     usuarios:["Crea accesos con cuidado","Cada persona tiene su usuario, su rol y sus sedes. La contraseña temporal se cambia al primer ingreso."],
-    hub:["Todo en un solo lugar","Cada tarjeta es un módulo del SIAU. PQRS se abre en esta plataforma; los módulos externos se abren en otra pestaña con sus propios accesos."],
+    hub:["Todo en un solo lugar","Cada tarjeta es un módulo del SIAU. PQRS y los módulos propios se ejecutan aquí mismo, cada uno con sus propios accesos."],
     config:["Automatiza con calma","Aquí se configuran los avisos, el correo automático y los respaldos. Cada interruptor tiene una explicación."]
   };
   function pasos(){
@@ -7620,7 +7698,7 @@ html[data-form="movil"] .rv-tour{bottom:calc(86px + env(safe-area-inset-bottom,0
       { t:"Bandeja de PQRS", d:"Aquí gestionas los casos por etapas: sin direccionar, en gestión, por responder y cerradas. El semáforo te dice cuáles se vencen.", v:"bandeja", foco:'#menu [data-v="bandeja"]', fm:'.tabbar [data-v="bandeja"]' },
       { t:"Prioritarias", d:"Riesgo vital, tutelas y requerimientos. Son las primeras que debes atender.", v:"prioritarias", foco:'#menu [data-v="prioritarias"]' }
     ];
-    if(p.admin) s.splice(2, 0, { t:"Módulos", d:"Este es tu inicio como administrador: una tarjeta por módulo del SIAU. PQRS se abre en esta plataforma y los módulos externos se abren en otra pestaña.", v:"hub", foco:'#menu [data-v="hub"]' });
+    if(p.admin) s.splice(2, 0, { t:"Módulos", d:"Este es tu inicio como administrador: una tarjeta por módulo del SIAU. PQRS y los módulos propios, como Seguimiento SIAU, se ejecutan aquí mismo.", v:"hub", foco:'#menu [data-v="hub"]' });
     if(p.radicar) s.push({ t:"Radicar PQRS", d:"Cuando un usuario te entregue una PQRS en la ventanilla, el buzón o por teléfono, regístrala aquí. El radicado y el término se calculan solos.", v:"radicar", foco:'#menu [data-v="radicar"]', fm:'.tabbar [data-v="radicar"]' });
     if(p.correo) s.push({ t:"Correo y EPS", d:"Los correos llegan clasificados. A las EPS y entes de control el sistema no les escribe: tú decides y respondes.", v:"correo", foco:'#menu [data-v="correo"]', fm:'.tabbar [data-v="correo"]' });
     s.push({ t:"Tablero e indicadores", d:"Gráficos por mes, sede y tipo, y la descarga del Excel de indicadores.", v:"tablero", foco:'#menu [data-v="tablero"]' });

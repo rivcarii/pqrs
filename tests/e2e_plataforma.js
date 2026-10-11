@@ -8,6 +8,7 @@ require("fs").mkdirSync(CAP, { recursive: true });
   const errores = [];
   for (const w of [1600, 1366, 820, 390]) {
     const p = await b.newPage({ viewport: { width: w, height: w < 500 ? 844 : 900 } });
+    await p.route(/script\.google\.com\/(a\/[^/]+\/)?macros\//, (r) => r.fulfill({ status: 200, contentType: "text/html; charset=utf-8", body: "<!doctype html><meta charset=\"utf-8\"><title>Evidencias</title><p id=\"ok\">módulo de prueba</p>" }));   // el módulo propio (otro proyecto) se simula
     p.on("pageerror", e => errores.push(w + " pageerror: " + e.message));
     p.on("console", m => { if (m.type() === "error" && !/ERR_TUNNEL|Failed to load resource/.test(m.text())) errores.push(w + " console: " + m.text()); });
     const desb = async (v) => { const o = await p.evaluate(() => document.documentElement.scrollWidth - window.innerWidth); if (o > 0) errores.push(w + " desborde " + v + ": " + o + "px"); };
@@ -52,16 +53,27 @@ require("fs").mkdirSync(CAP, { recursive: true });
       if (await p.$eval("#v-hub", e => e.hidden)) errores.push(w + " el administrador no aterriza en Módulos");
       const tarjetas = await p.$$eval("#hubCuerpo .hub-card", els => els.map(e => e.dataset.modulo));
       if (tarjetas.join() !== "pqrs,seguimiento,proximo") errores.push(w + " tarjetas de módulos inesperadas: " + tarjetas);
-      await p.waitForSelector('#hubCuerpo [data-hub-enlaces="seguimiento"] a', { timeout: 8000 }).catch(() => errores.push(w + " la tarjeta de Seguimiento SIAU no trae sus enlaces"));
-      const enl = await p.$$eval('#hubCuerpo [data-hub-enlaces="seguimiento"] a', els => els.map(e => ({ h: e.getAttribute("href"), t: e.target, r: e.rel })));
-      if (enl.length !== 2 || !/^https:\/\/script\.google\.com\/macros\/s\/[^/]+\/exec$/.test(enl[0].h) || !/\?pagina=admin$/.test(enl[1].h) || enl.some(x => x.t !== "_blank" || !/noopener/.test(x.r)))
-        errores.push(w + " los enlaces de Seguimiento SIAU no redirigen como se espera: " + JSON.stringify(enl));
+      await p.waitForSelector('#hubCuerpo [data-hub-enlaces="seguimiento"] button', { timeout: 8000 }).catch(() => errores.push(w + " la tarjeta de Seguimiento SIAU no trae sus botones"));
+      if ((await p.$$('#hubCuerpo [data-hub-enlaces="seguimiento"] button')).length !== 2) errores.push(w + " Seguimiento SIAU debe ofrecer visor y administrador");
       await p.waitForFunction(() => /vencidas/.test((document.querySelector('[data-hub-dato="pqrs"]') || {}).textContent || ""), null, { timeout: 8000 }).catch(() => errores.push(w + " la tarjeta de PQRS no muestra sus cifras"));
       const alt = await p.$$eval("#hubCuerpo .hub-card", els => els.map(e => Math.round(e.getBoundingClientRect().height)));
       await p.waitForTimeout(400); await desb("modulos"); if (w === 1366 || w === 390) await p.screenshot({ path: CAP + `z_${w}_modulos.png`, fullPage: true });
+      // el módulo propio se ejecuta DENTRO de la plataforma, en un marco aislado
+      await p.click('#hubCuerpo [data-hub-enlaces="seguimiento"] button[data-vista="visor"]');
+      await p.waitForSelector("#v-modulo:not([hidden]) #modFrame", { timeout: 8000 }).catch(() => errores.push(w + " el módulo no se abre dentro de la plataforma"));
+      const marco = await p.$eval("#modFrame", e => ({ src: e.getAttribute("src"), sb: e.getAttribute("sandbox"), ref: e.getAttribute("referrerpolicy") })).catch(() => ({}));
+      if (!/^https:\/\/script\.google\.com\/macros\/s\/[^/]+\/exec$/.test(marco.src || "")) errores.push(w + " el marco no apunta a la dirección incrustable: " + marco.src);
+      if (!/allow-scripts/.test(marco.sb || "") || /allow-top-navigation/.test(marco.sb || "") || marco.ref !== "no-referrer") errores.push(w + " el marco no está aislado como se espera: " + JSON.stringify(marco));
+      if (!/^https:\/\/script\.google\.com\/a\/miredips\.org\/macros\//.test(await p.getAttribute("#btnModPestana", "href"))) errores.push(w + " «Otra pestaña» no conserva la dirección original");
+      const dentro = await (await p.$("#modFrame")).contentFrame(); await dentro.waitForSelector("#ok", { timeout: 6000 }).catch(() => errores.push(w + " el contenido del módulo no se ejecutó dentro del marco"));
+      if ((await p.$$("#modTabs button")).length !== 2) errores.push(w + " faltan las pestañas Visor y Administrador del módulo");
+      await p.click('#modTabs button[data-mod-vista="admin"]'); await p.waitForTimeout(300);
+      if (!/\?pagina=admin$/.test(await p.getAttribute("#modFrame", "src"))) errores.push(w + " la pestaña Administrador no cambia el marco");
+      await desb("modulo"); if (w === 1366 || w === 390) await p.screenshot({ path: CAP + `z_${w}_modulo_abierto.png` });
+      await p.click("#btnModVolver"); await p.waitForSelector("#v-hub:not([hidden])", { timeout: 5000 }).catch(() => errores.push(w + " «Módulos» no vuelve al inicio general"));
       await p.click('#hubCuerpo [data-hub-ir="inicio"]'); await p.waitForSelector("#v-inicio:not([hidden]) .hero", { timeout: 10000 }).catch(() => errores.push(w + " «Abrir PQRS» no abre el inicio de PQRS"));
       // configuración de la dirección: solo acepta direcciones /exec de Apps Script
-      await p.evaluate(() => ver("config")); await p.waitForSelector("#segUrl", { timeout: 6000 });
+      await p.evaluate(() => ver("config")); await p.waitForSelector("#segUrl", { timeout: 6000 }); await p.waitForFunction(() => document.getElementById("segUrl").value.length > 20, null, { timeout: 6000 });   // espera a que llegue la dirección guardada
       await p.fill("#segUrl", "https://ejemplo.com/exec"); await p.click("#btnSegGuardar");
       await p.waitForSelector("#segAviso .aviso.err", { timeout: 5000 }).catch(() => errores.push(w + " Módulos externos acepta una dirección que no es de Apps Script"));
       await p.evaluate(() => ver("inicio")); await p.waitForSelector("#v-inicio:not([hidden]) .hero", { timeout: 10000 }); await p.waitForSelector("#meses .mes", { timeout: 15000 }); await p.waitForTimeout(500);

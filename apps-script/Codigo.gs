@@ -2450,7 +2450,7 @@ function _terminoTexto_(termino, tipoDia, entidad) {
 // MIGRACIÓN AUTOMÁTICA (se ejecuta una sola vez al abrir la plataforma)
 // ---------------------------------------------------------------------------
 var ESQUEMA = "8.5";
-var VERSION_CODIGO = "9.9 · Inicio general con módulos";
+var VERSION_CODIGO = "9.10 · Módulos propios dentro de la plataforma";
 
 function repararFechasYFormulas() {   // también disponible en el menú PQRS
   SpreadsheetApp.getUi();
@@ -4868,16 +4868,20 @@ function _urlPlataforma_(codigo) {
  */
 var URL_PLATAFORMA_DEFECTO = "https://script.google.com/macros/s/AKfycbygfb4GL4ht0B9RSJIUFO5CxREvHNdKoNVCj7qgbCfSqqXdSmJUggxBf0TGrQo3tqlp/exec";
 /** v9.8 · Plataforma de evidencias del SIAU y la Asociación de Usuarios (proyecto aparte: su propia hoja, su propia carpeta de fotos y sus propios accesos). */
-var URL_SEGUIMIENTO_DEFECTO = "https://script.google.com/macros/s/AKfycbwgDCf6Jdza2uEb6tLoXKUFaTYvfasHgC5Yzi8QgYhAKyJE8h_qqBDuP0wce7karLvY/exec";
+var URL_SEGUIMIENTO_DEFECTO = "https://script.google.com/a/miredips.org/macros/s/AKfycbxkOjX1IUSh8U5tLrganZyizzipvK-K00MhP_0gbLP6sZyKKvrqcUEM8PHROb2JNF-U/exec";
 var REPO_SEGUIMIENTO = "https://github.com/rivcarii/SEGUIMIENTO-SIAU-ASOUSUARIOS";
+/** Dirección de una aplicación web de Apps Script: la común (…/macros/s/ID/exec) o la de dominio (…/a/miredips.org/macros/s/ID/exec). */
+var RE_URL_APPS_SCRIPT_ = /^https:\/\/script\.google\.com\/(a\/[A-Za-z0-9.-]+\/)?macros\/s\/[A-Za-z0-9_-]{20,}\/exec$/;
 function _urlSeguimiento_() {
   var u = ""; try { u = String(PropertiesService.getScriptProperties().getProperty("SEGUIMIENTO_URL") || "").trim(); } catch (e) {}
-  return /^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]{20,}\/exec$/.test(u) ? u : URL_SEGUIMIENTO_DEFECTO;
+  return RE_URL_APPS_SCRIPT_.test(u) ? u : URL_SEGUIMIENTO_DEFECTO;
 }
-/** Enlaces del módulo «Seguimiento SIAU» (otro proyecto, otra cuenta de Google). Solo redirige: no se comparten datos ni sesiones. Solo el administrador los recibe. */
+/** Direcciones del módulo «Seguimiento SIAU» (otro proyecto de Apps Script del mismo dueño). Se abre dentro de la plataforma, en un marco propio, y también en otra pestaña; no se comparten datos ni sesiones. Solo el administrador las recibe. */
+/** Quita el tramo de dominio (/a/miredips.org) de una dirección de Apps Script: la forma común sirve para incrustar la aplicación en un marco. */
+function _urlIncrustable_(u) { return String(u || "").replace(/^(https:\/\/script\.google\.com)\/a\/[A-Za-z0-9.-]+\/macros\//, "$1/macros/"); }
 function apiSeguimiento_() {
-  var u = _urlSeguimiento_();
-  return { ok: true, visor: u, admin: u + "?pagina=admin", repo: REPO_SEGUIMIENTO, personalizado: u !== URL_SEGUIMIENTO_DEFECTO };
+  var u = _urlSeguimiento_(), e = _urlIncrustable_(u);
+  return { ok: true, visor: u, admin: u + "?pagina=admin", visorEmbed: e, adminEmbed: e + "?pagina=admin", repo: REPO_SEGUIMIENTO, personalizado: u !== URL_SEGUIMIENTO_DEFECTO };
 }
 /** Cambia la dirección de la plataforma de evidencias (solo https://script.google.com/macros/s/…/exec). Texto vacío = la predeterminada. */
 function apiGuardarSeguimiento_(url) {
@@ -4885,8 +4889,8 @@ function apiGuardarSeguimiento_(url) {
   url = String(url || "").trim();
   var p = PropertiesService.getScriptProperties();
   if (!url) { p.deleteProperty("SEGUIMIENTO_URL"); _auditar_("Enlace de Seguimiento SIAU", SESION ? SESION.usuario : "sistema", "Restablecido al predeterminado"); return apiSeguimiento_(); }
-  if (!/^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]{20,}\/exec$/.test(url))
-    return { ok: false, mensaje: "Pega la dirección de la aplicación web de la plataforma de evidencias: empieza por https://script.google.com/macros/s/ y termina en /exec." };
+  if (!RE_URL_APPS_SCRIPT_.test(url))
+    return { ok: false, mensaje: "Pega la dirección de la aplicación web de la plataforma de evidencias: empieza por https://script.google.com/ y termina en /exec." };
   p.setProperty("SEGUIMIENTO_URL", url);
   _auditar_("Enlace de Seguimiento SIAU", SESION ? SESION.usuario : "sistema", "Dirección actualizada");
   return apiSeguimiento_();

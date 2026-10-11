@@ -96,7 +96,9 @@ Ajustes que solo puede hacer el dueño del repositorio, en **Settings** (una vez
 4. **Cuenta de GitHub:** verificación en dos pasos y llave de acceso o app autenticadora.
 5. Nadie más con permiso de escritura (*Settings ▸ Collaborators*).
 
-## Módulos externos (v9.9)
-- **Solo se enlazan.** Seguimiento SIAU es otro proyecto (otra cuenta de Google): esta plataforma no lo incrusta, no lo consulta desde el servidor y no comparte datos, cookies ni sesiones con él. La tarjeta abre su dirección en otra pestaña (`target="_blank"` con `rel="noopener noreferrer"`) y allí se entra con sus propios accesos.
-- **Solo administradores.** `apiSeguimiento` y `apiGuardarSeguimiento` son `P_ADMIN`: el técnico ni ve la tarjeta ni puede pedir la dirección por la API. La dirección solo acepta `https://script.google.com/macros/s/…/exec`.
-- Pruebas: `tests/pruebas_v8.js` (sección «Seguimiento SIAU») y `tests/e2e_plataforma.js` (tarjetas, enlaces y rol).
+## Módulos propios dentro de la plataforma (v9.10)
+- **Marco aislado.** Seguimiento SIAU (otro proyecto de Apps Script del mismo dueño) se ejecuta en un `iframe` con `sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox allow-downloads allow-modals"`: sin `allow-top-navigation`, así que no puede cambiar ni redirigir la página principal. `referrerpolicy="no-referrer"` y solo se acepta una dirección `https://script.google.com/`.
+- **Sin datos ni sesiones compartidos.** Esta plataforma no lee ni escribe en el módulo ni al revés; cada uno conserva su base de datos y sus accesos. El marco se elimina al cerrar sesión.
+- **Solo administradores.** `apiSeguimiento` y `apiGuardarSeguimiento` son `P_ADMIN`; `ver("modulo")` redirige a Inicio a quien no lo sea. La dirección solo acepta `https://script.google.com/[a/dominio/]macros/s/…/exec`.
+- **CSP del portal.** Se agrega `frame-src https://script.google.com https://*.googleusercontent.com` (necesario para el marco); el resto sigue igual.
+- Pruebas: `tests/pruebas_v8.js` (sección «Seguimiento SIAU»), `tests/e2e_plataforma.js` (tarjeta, marco aislado, pestañas, rol) y `tests/e2e_portal.js` (CSP).

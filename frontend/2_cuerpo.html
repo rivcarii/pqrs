@@ -423,8 +423,25 @@
   <!-- ===================== MÓDULOS (inicio general, solo administradores) ===================== -->
   <section id="v-hub" hidden>
     <div class="cab-vista"><div><h2 class="vista">Módulos</h2>
-      <p class="sub">Todo el SIAU en un solo lugar: cada tarjeta abre su módulo. Los externos se abren en otra pestaña, con sus propios accesos.</p></div></div>
+      <p class="sub">Todo el SIAU en un solo lugar: cada tarjeta abre su módulo aquí mismo, sin salir de la plataforma.</p></div></div>
     <div id="hubCuerpo"></div>
+  </section>
+
+  <!-- ===================== MÓDULO ABIERTO (marco de un proyecto propio, solo administradores) ===================== -->
+  <section id="v-modulo" hidden>
+    <div class="mod-barra">
+      <button class="b fant mini" id="btnModVolver" type="button"><svg class="ic s"><use href="#i-flecha"/></svg>Módulos</button>
+      <h2 class="vista" id="modTitulo">Módulo</h2>
+      <div class="mod-tabs" id="modTabs" role="tablist"></div>
+      <span class="mod-acciones">
+        <button class="b sec mini" id="btnModRecargar" type="button"><svg class="ic s"><use href="#i-actualizar"/></svg>Recargar</button>
+        <a class="b sec mini" id="btnModPestana" href="#" target="_blank" rel="noopener noreferrer"><svg class="ic s"><use href="#i-externo"/></svg>Otra pestaña</a>
+      </span>
+    </div>
+    <div class="mod-marco" id="modMarco">
+      <div class="mod-carga" id="modCarga"><span class="solar"><span class="nucleo"></span><b></b><b></b></span><span>Abriendo el módulo…</span></div>
+    </div>
+    <p class="hint mod-ayuda">Si aquí aparece un aviso de acceso o queda en blanco, usa «Otra pestaña» y revisa que la implementación del módulo esté en «Ejecutar como: yo» y «Cualquier persona».</p>
   </section>
 
   <!-- ===================== CONFIGURACIÓN ===================== -->
@@ -547,7 +564,7 @@
     <div class="card">
       <div id="cfgAviso"></div>
       <fieldset><legend>Módulos externos</legend>
-        <p class="sub" style="margin:0 0 12px">Los módulos que viven en otro proyecto (y otra cuenta de Google) solo se enlazan desde Módulos: no se comparten datos ni sesiones.</p>
+        <p class="sub" style="margin:0 0 12px">Los módulos que viven en otro proyecto de Apps Script se abren dentro de la plataforma desde Módulos, en un marco aparte: no se comparten datos ni sesiones. Puedes pegar la dirección común o la de dominio (/a/miredips.org/…).</p>
         <label for="segUrl">Seguimiento SIAU · dirección de la aplicación web (termina en /exec)</label>
         <input id="segUrl" spellcheck="false" autocomplete="off">
         <div class="acciones"><button class="b pri" id="btnSegGuardar" type="button"><svg class="ic s"><use href="#i-check"/></svg>Guardar dirección</button>

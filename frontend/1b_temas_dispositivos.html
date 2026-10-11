@@ -381,6 +381,25 @@ html[data-tema="oscuro"] .hub-dato{color:var(--ink)}
 .hub-botones .b{width:100%}
 .hub-vacia{border:1.5px dashed var(--line-2);background:transparent;box-shadow:none}
 .hub-vacia .hub-ico{color:var(--ink-3)}
+/* 8 · Módulo abierto dentro de la plataforma */
+.mod-barra{display:flex;align-items:center;flex-wrap:wrap;gap:10px 14px;margin-bottom:12px}
+.mod-barra h2.vista{margin:0;font-size:20px}
+.mod-tabs{display:inline-flex;gap:2px;padding:3px;border-radius:999px;background:rgba(118,118,128,.14)}
+.mod-tabs:empty{display:none}
+.mod-tabs button{border:0;background:transparent;border-radius:999px;padding:7px 16px;min-height:34px;font:600 13px var(--sans);color:var(--ink-2);cursor:pointer;transition:background .18s var(--ease),color .18s var(--ease)}
+.mod-tabs button[aria-selected="true"]{background:var(--surface);color:var(--ink);box-shadow:0 2px 6px rgba(0,0,0,.12)}
+.mod-acciones{margin-left:auto;display:flex;gap:8px}
+.mod-marco{position:relative;height:calc(100dvh - 200px);min-height:520px;border-radius:var(--r-lg);overflow:hidden;background:var(--surface);border:1px solid var(--line);box-shadow:var(--sh-2)}
+.mod-marco iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:var(--surface)}
+.mod-carga{position:absolute;inset:0;z-index:1;display:grid;place-content:center;justify-items:center;gap:14px;background:var(--surface);color:var(--ink-3);font-size:13px;transition:opacity .3s var(--ease)}
+.mod-carga.fuera{opacity:0;pointer-events:none}
+.mod-ayuda{margin:10px 2px 0}
+html:not([data-form="movil"]) .mod-ayuda{padding-right:210px}   /* deja libre el botón flotante de Riverino */
+html[data-form="movil"] .mod-marco{height:calc(100dvh - 330px);min-height:420px}
+html[data-form="movil"] .mod-acciones{margin-left:0;width:100%}
+html[data-form="movil"] .mod-acciones .b{flex:1}
+@media(prefers-reduced-motion:reduce){.mod-carga{transition:none}}
+
 @media(max-width:420px){.hub-botones{grid-template-columns:minmax(0,1fr)}}
 </style>
 

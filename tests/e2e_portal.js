@@ -44,6 +44,7 @@ const API = "https://script.google.com/macros/s/PRUEBA/exec";
   const man = JSON.parse(fs.readFileSync(path.join(raiz, "manifest.webmanifest"), "utf8"));
   if (man.display !== "standalone" || !man.icons.some(i => i.purpose === "maskable") || man.icons.some(i => !fs.existsSync(path.join(raiz, i.src)))) errores.push("el manifiesto de la app está incompleto");
   const html = fs.readFileSync(path.join(raiz, "index.html"), "utf8"), sw = fs.readFileSync(path.join(raiz, "sw.js"), "utf8");
+  if (!/frame-src https:\/\/script\.google\.com/.test(html)) errores.push("la CSP del portal no permite abrir los módulos propios en un marco");
   if (!/rel="manifest"/.test(html) || !/manifest-src 'self'; worker-src 'self'/.test(html)) errores.push("el portal no declara el manifiesto o la CSP no lo permite");
   try { new Function(sw); } catch (e) { errores.push("sw.js no es JavaScript válido: " + e.message); }
   if (!/u\.origin !== self\.location\.origin\) return/.test(sw) || /script\.google\.com/.test(sw)) errores.push("el service worker podría interceptar las llamadas a Apps Script");

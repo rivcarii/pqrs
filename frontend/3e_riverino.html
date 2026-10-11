@@ -93,7 +93,7 @@ html[data-form="movil"] .rv-tour{bottom:calc(86px + env(safe-area-inset-bottom,0
     { t:"Cómo configuro las áreas responsables", v:"responsables", p:"admin", k:"directorio areas responsables reglas direccionamiento servicios palabras clave copias correo jefe",
       d:"<p>El <b>Directorio de áreas</b> define quién recibe cada solicitud: servicios, sedes, palabras clave y correos en copia. Entre más completo esté, mejores serán las sugerencias de direccionamiento.</p>" },
     { t:"Qué es la pantalla de Módulos", v:"hub", p:"admin", k:"modulos modulo inicio general tarjetas seguimiento siau evidencias asociacion usuarios plataforma abrir integrar un solo lugar fototeca cumplimiento",
-      d:"<p><b>Módulos</b> es el inicio general del administrador: una tarjeta por módulo. <b>Sistema de PQRS</b> se abre aquí mismo; <b>Seguimiento SIAU</b> (evidencias y cumplimiento de las sedes) es otra plataforma, con otra cuenta de Google, y se abre en una pestaña nueva con sus propios accesos. Los módulos nuevos aparecerán como tarjetas.</p>" },
+      d:"<p><b>Módulos</b> es el inicio general del administrador: una tarjeta por módulo. <b>Sistema de PQRS</b> se abre aquí mismo; <b>Seguimiento SIAU</b> (evidencias y cumplimiento de las sedes) es otro proyecto tuyo (evidencias y cumplimiento de las sedes) y se ejecuta dentro de la plataforma, en su propio marco y con sus propios accesos; también puedes abrirlo en otra pestaña. Los módulos nuevos aparecerán como tarjetas.</p>" },
     { t:"Qué se configura en Configuración", v:"config", p:"admin", k:"configuracion automatizacion avisos google chat push ntfy whatsapp respaldo entidades categorias qr ajustes",
       d:"<p><b>Configuración</b> reúne la automatización del correo (EPS, entes, usuarios, citas), los avisos por Google Chat y push, el WhatsApp, el respaldo diario en Drive y la tabla de entidades y categorías.</p>" },
     { t:"Cómo cambio mi contraseña o el tema", v:"inicio", sel:"#btnPerfil", k:"contrasena clave cambiar password tema oscuro claro apariencia instalar app celular cerrar sesion perfil salir",
@@ -121,7 +121,7 @@ html[data-form="movil"] .rv-tour{bottom:calc(86px + env(safe-area-inset-bottom,0
     tablero:["Los números de tus sedes","Cambia de mes o de año y descarga el Excel de indicadores cuando lo necesites."],
     responsables:["Quién recibe qué","Entre más completo el directorio, mejor se sugiere el área al direccionar."],
     usuarios:["Crea accesos con cuidado","Cada persona tiene su usuario, su rol y sus sedes. La contraseña temporal se cambia al primer ingreso."],
-    hub:["Todo en un solo lugar","Cada tarjeta es un módulo del SIAU. PQRS se abre en esta plataforma; los módulos externos se abren en otra pestaña con sus propios accesos."],
+    hub:["Todo en un solo lugar","Cada tarjeta es un módulo del SIAU. PQRS y los módulos propios se ejecutan aquí mismo, cada uno con sus propios accesos."],
     config:["Automatiza con calma","Aquí se configuran los avisos, el correo automático y los respaldos. Cada interruptor tiene una explicación."]
   };
   function pasos(){
@@ -132,7 +132,7 @@ html[data-form="movil"] .rv-tour{bottom:calc(86px + env(safe-area-inset-bottom,0
       { t:"Bandeja de PQRS", d:"Aquí gestionas los casos por etapas: sin direccionar, en gestión, por responder y cerradas. El semáforo te dice cuáles se vencen.", v:"bandeja", foco:'#menu [data-v="bandeja"]', fm:'.tabbar [data-v="bandeja"]' },
       { t:"Prioritarias", d:"Riesgo vital, tutelas y requerimientos. Son las primeras que debes atender.", v:"prioritarias", foco:'#menu [data-v="prioritarias"]' }
     ];
-    if(p.admin) s.splice(2, 0, { t:"Módulos", d:"Este es tu inicio como administrador: una tarjeta por módulo del SIAU. PQRS se abre en esta plataforma y los módulos externos se abren en otra pestaña.", v:"hub", foco:'#menu [data-v="hub"]' });
+    if(p.admin) s.splice(2, 0, { t:"Módulos", d:"Este es tu inicio como administrador: una tarjeta por módulo del SIAU. PQRS y los módulos propios, como Seguimiento SIAU, se ejecutan aquí mismo.", v:"hub", foco:'#menu [data-v="hub"]' });
     if(p.radicar) s.push({ t:"Radicar PQRS", d:"Cuando un usuario te entregue una PQRS en la ventanilla, el buzón o por teléfono, regístrala aquí. El radicado y el término se calculan solos.", v:"radicar", foco:'#menu [data-v="radicar"]', fm:'.tabbar [data-v="radicar"]' });
     if(p.correo) s.push({ t:"Correo y EPS", d:"Los correos llegan clasificados. A las EPS y entes de control el sistema no les escribe: tú decides y respondes.", v:"correo", foco:'#menu [data-v="correo"]', fm:'.tabbar [data-v="correo"]' });
     s.push({ t:"Tablero e indicadores", d:"Gráficos por mes, sede y tipo, y la descarga del Excel de indicadores.", v:"tablero", foco:'#menu [data-v="tablero"]' });
