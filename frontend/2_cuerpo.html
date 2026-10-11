@@ -16,6 +16,7 @@
   <symbol id="i-radicar" viewBox="0 0 24 24"><path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"/><path d="M14 3v5h5"/><path d="M12 11v6M9 14h6"/></symbol>
   <symbol id="i-tablero" viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></symbol>
   <symbol id="i-personas" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18.5 20a6.5 6.5 0 0 0-3-5.5"/></symbol>
+  <symbol id="i-modulos" viewBox="0 0 24 24"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></symbol>
   <symbol id="i-externo" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
   <symbol id="i-camara" viewBox="0 0 24 24"><path d="M4 8a1 1 0 0 1 1-1h2.5l1.5-2h6l1.5 2H19a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/><circle cx="12" cy="13" r="3.5"/></symbol>
   <symbol id="i-ajustes" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 0 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 0 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 0 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 0 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></symbol>
@@ -108,6 +109,7 @@
     <div class="lat-app"><img id="logoSiau" alt="SIAU" src=""><span><b>Gestión de PQRS</b>Oficina de Atención al Usuario</span></div>
   </div>
   <nav id="menu">
+    <button data-v="hub" data-perm="admin"><svg class="ic"><use href="#i-modulos"/></svg>Módulos</button>
     <p class="grupo">Operación</p>
     <button class="on" data-v="inicio"><svg class="ic"><use href="#i-inicio"/></svg>Inicio</button>
     <button data-v="bandeja"><svg class="ic"><use href="#i-bandeja"/></svg>Bandeja de PQRS</button>
@@ -119,7 +121,6 @@
     <button data-v="tablero"><svg class="ic"><use href="#i-tablero"/></svg>Tablero</button>
     <p class="grupo" data-perm="admin">Administración</p>
     <button data-v="responsables" data-perm="admin"><svg class="ic"><use href="#i-area"/></svg>Directorio de áreas</button>
-    <button data-v="seguimiento" data-perm="admin"><svg class="ic"><use href="#i-camara"/></svg>Seguimiento SIAU</button>
     <button data-v="usuarios" data-perm="admin"><svg class="ic"><use href="#i-personas"/></svg>Usuarios y sedes</button>
     <button data-v="config" data-perm="admin"><svg class="ic"><use href="#i-ajustes"/></svg>Configuración</button>
   </nav>
@@ -419,12 +420,11 @@
     </div>
   </section>
 
-  <!-- ===================== SEGUIMIENTO SIAU (solo administradores) ===================== -->
-  <section id="v-seguimiento" hidden>
-    <div class="cab-vista"><div><h2 class="vista">Seguimiento SIAU</h2>
-      <p class="sub">Evidencias del SIAU y de la Asociación de Usuarios: cumplimiento de cada sede, fototeca, personal y rotación.</p></div></div>
-    <div id="segAviso"></div>
-    <div id="segCuerpo"></div>
+  <!-- ===================== MÓDULOS (inicio general, solo administradores) ===================== -->
+  <section id="v-hub" hidden>
+    <div class="cab-vista"><div><h2 class="vista">Módulos</h2>
+      <p class="sub">Todo el SIAU en un solo lugar: cada tarjeta abre su módulo. Los externos se abren en otra pestaña, con sus propios accesos.</p></div></div>
+    <div id="hubCuerpo"></div>
   </section>
 
   <!-- ===================== CONFIGURACIÓN ===================== -->
@@ -546,6 +546,14 @@
     </div>
     <div class="card">
       <div id="cfgAviso"></div>
+      <fieldset><legend>Módulos externos</legend>
+        <p class="sub" style="margin:0 0 12px">Los módulos que viven en otro proyecto (y otra cuenta de Google) solo se enlazan desde Módulos: no se comparten datos ni sesiones.</p>
+        <label for="segUrl">Seguimiento SIAU · dirección de la aplicación web (termina en /exec)</label>
+        <input id="segUrl" spellcheck="false" autocomplete="off">
+        <div class="acciones"><button class="b pri" id="btnSegGuardar" type="button"><svg class="ic s"><use href="#i-check"/></svg>Guardar dirección</button>
+          <button class="b sec" id="btnSegRestablecer" type="button"><svg class="ic s"><use href="#i-actualizar"/></svg>Usar la predeterminada</button></div>
+        <div id="segAviso"></div>
+      </fieldset>
       <fieldset><legend>Estado del canal QR</legend>
         <p class="sub" style="margin:0 0 12px">Comprueba si las respuestas del formulario están entrando al consolidado y si el acuse automático puede salir.</p>
         <div class="acciones" style="margin-top:0">

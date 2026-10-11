@@ -2450,7 +2450,7 @@ function _terminoTexto_(termino, tipoDia, entidad) {
 // MIGRACIÓN AUTOMÁTICA (se ejecuta una sola vez al abrir la plataforma)
 // ---------------------------------------------------------------------------
 var ESQUEMA = "8.5";
-var VERSION_CODIGO = "9.8 · Módulo Seguimiento SIAU (solo administradores)";
+var VERSION_CODIGO = "9.9 · Inicio general con módulos";
 
 function repararFechasYFormulas() {   // también disponible en el menú PQRS
   SpreadsheetApp.getUi();
@@ -3962,7 +3962,7 @@ var RUTAS = {
   // v8.2
   apiExportarExcel: [apiExportarExcel_, P_LEER], apiAuditoria: [apiAuditoria_, P_ADMIN], apiRespaldarAhora: [apiRespaldarAhora_, P_ADMIN],
   apiAjustes: [apiAjustes_, P_ADMIN], apiGuardarAjustes: [apiGuardarAjustes_, P_ADMIN],
-  apiSeguimiento: [apiSeguimiento_, P_ADMIN], apiGuardarSeguimiento: [apiGuardarSeguimiento_, P_ADMIN], apiSeguimientoResumen: [apiSeguimientoResumen_, P_ADMIN], apiProbarSeguimiento: [apiProbarSeguimiento_, P_ADMIN],
+  apiSeguimiento: [apiSeguimiento_, P_ADMIN], apiGuardarSeguimiento: [apiGuardarSeguimiento_, P_ADMIN],
   apiGuardarEntidad: [apiGuardarEntidad_, P_ADMIN], apiGuardarCategoria: [apiGuardarCategoria_, P_ADMIN], apiWhatsappEstado: [apiWhatsappEstado_, P_ADMIN], apiGuardarWhatsapp: [apiGuardarWhatsapp_, P_ADMIN], apiProbarWhatsapp: [apiProbarWhatsapp_, P_ADMIN],
   apiProbarAvisoExterno: [apiProbarAvisoExterno_, P_ADMIN],
 
@@ -4867,11 +4867,6 @@ function _urlPlataforma_(codigo) {
  * 2) URL_PLATAFORMA_DEFECTO (la implementación activa al publicar esta versión), 3) getService().getUrl().
  */
 var URL_PLATAFORMA_DEFECTO = "https://script.google.com/macros/s/AKfycbygfb4GL4ht0B9RSJIUFO5CxREvHNdKoNVCj7qgbCfSqqXdSmJUggxBf0TGrQo3tqlp/exec";
-/**
- * v8.5 · Enlace de ingreso que se entrega a las personas: el portal publicado en GitHub Pages
- * (todos los correos, avisos y botones «Ingresar» lo usan). Propiedad opcional URL_PORTAL para cambiarlo
- * (por ejemplo un dominio propio). El portal habla con Apps Script por el /exec de URL_PLATAFORMA_DEFECTO.
- */
 /** v9.8 · Plataforma de evidencias del SIAU y la Asociación de Usuarios (proyecto aparte: su propia hoja, su propia carpeta de fotos y sus propios accesos). */
 var URL_SEGUIMIENTO_DEFECTO = "https://script.google.com/macros/s/AKfycbwgDCf6Jdza2uEb6tLoXKUFaTYvfasHgC5Yzi8QgYhAKyJE8h_qqBDuP0wce7karLvY/exec";
 var REPO_SEGUIMIENTO = "https://github.com/rivcarii/SEGUIMIENTO-SIAU-ASOUSUARIOS";
@@ -4879,87 +4874,28 @@ function _urlSeguimiento_() {
   var u = ""; try { u = String(PropertiesService.getScriptProperties().getProperty("SEGUIMIENTO_URL") || "").trim(); } catch (e) {}
   return /^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]{20,}\/exec$/.test(u) ? u : URL_SEGUIMIENTO_DEFECTO;
 }
-/** Enlaces del módulo «Seguimiento SIAU». Solo el administrador los recibe: el técnico ni siquiera los puede pedir. */
+/** Enlaces del módulo «Seguimiento SIAU» (otro proyecto, otra cuenta de Google). Solo redirige: no se comparten datos ni sesiones. Solo el administrador los recibe. */
 function apiSeguimiento_() {
-  var u = _urlSeguimiento_(), p = PropertiesService.getScriptProperties();
-  return { ok: true, visor: u, admin: u + "?pagina=admin", repo: REPO_SEGUIMIENTO, personalizado: u !== URL_SEGUIMIENTO_DEFECTO,
-           usuario: String(p.getProperty("SEGUIMIENTO_USUARIO") || ""), claveGuardada: !!p.getProperty("SEGUIMIENTO_CLAVE") };
+  var u = _urlSeguimiento_();
+  return { ok: true, visor: u, admin: u + "?pagina=admin", repo: REPO_SEGUIMIENTO, personalizado: u !== URL_SEGUIMIENTO_DEFECTO };
 }
-/**
- * Guarda la dirección y las credenciales del puente. Acepta un texto (solo la dirección) o {url, usuario, clave}. La contraseña solo se
- * reemplaza si se escribe una nueva y nunca se devuelve ni se registra.
- */
-function apiGuardarSeguimiento_(d) {
-  if (typeof d === "string") d = { url: d };
-  d = d || {};
+/** Cambia la dirección de la plataforma de evidencias (solo https://script.google.com/macros/s/…/exec). Texto vacío = la predeterminada. */
+function apiGuardarSeguimiento_(url) {
+  if (url && typeof url === "object") url = url.url;
+  url = String(url || "").trim();
   var p = PropertiesService.getScriptProperties();
-  if (d.url !== undefined) {
-    var url = String(d.url || "").trim();
-    if (!url) p.deleteProperty("SEGUIMIENTO_URL");
-    else if (!/^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]{20,}\/exec$/.test(url))
-      return { ok: false, mensaje: "Pega la dirección de la aplicación web de la plataforma de evidencias: empieza por https://script.google.com/macros/s/ y termina en /exec." };
-    else p.setProperty("SEGUIMIENTO_URL", url);
-  }
-  var usuario = d.usuario === undefined ? null : String(d.usuario || "").trim(), clave = String(d.clave || "");
-  if (usuario !== null && usuario && !/^[A-Za-z0-9._-]{3,60}$/.test(usuario)) return { ok: false, mensaje: "El usuario del puente son letras, números, punto o guion (3 a 60 caracteres)." };
-  if (clave && (clave.length < 8 || clave.length > 200)) return { ok: false, mensaje: "La contraseña del puente debe tener entre 8 y 200 caracteres." };
-  if (usuario !== null) { if (usuario) p.setProperty("SEGUIMIENTO_USUARIO", usuario); else { p.deleteProperty("SEGUIMIENTO_USUARIO"); p.deleteProperty("SEGUIMIENTO_CLAVE"); } }
-  if (clave) p.setProperty("SEGUIMIENTO_CLAVE", clave);
-  try { var c = CacheService.getScriptCache(); c.remove("SEG_TOKEN"); c.remove("SEG_RESUMEN"); } catch (e) {}
-  _auditar_("Conexión de Seguimiento SIAU", SESION ? SESION.usuario : "sistema", "Datos del puente guardados" + (clave ? " (contraseña nueva)" : ""));
+  if (!url) { p.deleteProperty("SEGUIMIENTO_URL"); _auditar_("Enlace de Seguimiento SIAU", SESION ? SESION.usuario : "sistema", "Restablecido al predeterminado"); return apiSeguimiento_(); }
+  if (!/^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]{20,}\/exec$/.test(url))
+    return { ok: false, mensaje: "Pega la dirección de la aplicación web de la plataforma de evidencias: empieza por https://script.google.com/macros/s/ y termina en /exec." };
+  p.setProperty("SEGUIMIENTO_URL", url);
+  _auditar_("Enlace de Seguimiento SIAU", SESION ? SESION.usuario : "sistema", "Dirección actualizada");
   return apiSeguimiento_();
 }
 /**
- * Puente servidor a servidor con la plataforma de evidencias, que corre en OTRA cuenta de Google. La consulta sale de este servidor
- * (UrlFetchApp), así el administrador no abre una segunda sesión ni choca con varias cuentas en el navegador. Usa una cuenta «Consulta»
- * de esa plataforma y solo lee el resumen. El texto de error nunca incluye la contraseña.
+ * v8.5 · Enlace de ingreso que se entrega a las personas: el portal publicado en GitHub Pages
+ * (todos los correos, avisos y botones «Ingresar» lo usan). Propiedad opcional URL_PORTAL para cambiarlo
+ * (por ejemplo un dominio propio). El portal habla con Apps Script por el /exec de URL_PLATAFORMA_DEFECTO.
  */
-function _seguimientoPost_(url, req) {
-  var r;
-  try { r = UrlFetchApp.fetch(url, { method: "post", contentType: "application/json", payload: JSON.stringify(req), muteHttpExceptions: true, followRedirects: true }); }
-  catch (e) { return { ok: false, estado: 0, error: "No se pudo conectar con la plataforma de evidencias (" + String(e && e.message || e).slice(0, 120) + ")." }; }
-  var j = null; try { j = JSON.parse(r.getContentText()); } catch (e2) { j = null; }
-  if (!j || typeof j.ok !== "boolean") return { ok: false, estado: r.getResponseCode ? r.getResponseCode() : 0, error: "La plataforma de evidencias no devolvió datos. Revisa que su implementación esté en «Ejecutar como: yo» y «Cualquier persona», con el código nuevo (versión que incluye el puente)." };
-  return j;
-}
-function _seguimientoLlamar_(ruta, q) {
-  var p = PropertiesService.getScriptProperties(), usuario = String(p.getProperty("SEGUIMIENTO_USUARIO") || ""), clave = String(p.getProperty("SEGUIMIENTO_CLAVE") || "");
-  if (!usuario || !clave) return { ok: false, estado: 0, error: "sin_credenciales" };
-  var url = _urlSeguimiento_(), cache = CacheService.getScriptCache(), tok = cache.get("SEG_TOKEN") || "", r = null;
-  for (var i = 0; i < 2; i++) {
-    if (!tok) {
-      var l = _seguimientoPost_(url, { metodo: "POST", ruta: "/api/login", cuerpo: { usuario: usuario, clave: clave } });
-      if (!l.ok) return { ok: false, estado: l.estado, error: l.estado === 401 || l.estado === 429 ? l.error : (l.error || "No se pudo iniciar sesión en la plataforma de evidencias.") };
-      tok = l.datos.token; cache.put("SEG_TOKEN", tok, 18000);   // la sesión de allá dura 6 h; aquí se renueva a las 5
-    }
-    r = _seguimientoPost_(url, { metodo: "GET", ruta: ruta, q: q || {}, token: tok });
-    if (r.ok || r.estado !== 401) return r;
-    tok = ""; cache.remove("SEG_TOKEN");
-  }
-  return r;
-}
-/** Resumen del mes (solo conteos agregados: sin nombres de personas). Se guarda 5 minutos para no consultar en cada visita. */
-function apiSeguimientoResumen_(forzar) {
-  var base = apiSeguimiento_(), cache = CacheService.getScriptCache();
-  if (!base.usuario || !base.claveGuardada) { base.conectado = false; base.motivo = "sin_credenciales"; return base; }
-  if (!forzar) { var c = cache.get("SEG_RESUMEN"); if (c) { try { var o = JSON.parse(c); o.desdeCache = true; return Object.assign(base, o); } catch (e) {} } }
-  var mes = Utilities.formatDate(new Date(), _tz_(), "yyyy-MM");
-  var r = _seguimientoLlamar_("/api/panel", { mes: mes });
-  if (!r.ok) { base.conectado = false; base.motivo = "error"; base.mensaje = String(r.error || "Sin respuesta"); return base; }
-  var s = (r.datos && r.datos.resumen) || {};
-  var resumen = { mes: mes, siau: s.siau || 0, evaluados: s.evaluados || 0, estados: s.estados || {},
-    encuestas: { valor: (s.encuestas && s.encuestas.valor) || 0, meta: (s.encuestas && s.encuestas.meta) || null },
-    charlas: { valor: (s.charlas && s.charlas.valor) || 0, meta: (s.charlas && s.charlas.meta) || null },
-    actas: s.actas || null, evidencias: s.evidencias || { total: 0 } };
-  try { cache.put("SEG_RESUMEN", JSON.stringify({ conectado: true, resumen: resumen }), 300); } catch (e3) {}
-  base.conectado = true; base.resumen = resumen;
-  return base;
-}
-function apiProbarSeguimiento_() {
-  var r = apiSeguimientoResumen_(true);
-  _auditar_("Prueba de Seguimiento SIAU", SESION ? SESION.usuario : "sistema", r.conectado ? "Conectado" : "Sin conexión");
-  return Object.assign(r, { mensaje: r.conectado ? "Conexión correcta: se leyó el resumen del mes." : (r.motivo === "sin_credenciales" ? "Guarda primero el usuario y la contraseña del puente." : "No se pudo conectar: " + r.mensaje) });
-}
 var URL_PORTAL_DEFECTO = "https://rivcarii.github.io/DEFINIDO/portal/";
 function _urlPortal_() {
   var p = "";

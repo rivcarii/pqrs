@@ -18,5 +18,3 @@ Luego, en la hoja: menú **PQRS ▸ Instalar disparadores** (el correo se revisa
 - **Portal (GitHub):** `portal_index.html` va como `portal/index.html` (ya trae la URL /exec).
 - Nuevo: ficha del formulario descargable por técnicos, ingreso con mascota, usuario nuevo con correo de bienvenida y clave **Siau123\*** (vence a las 72 h), «Motivo específico (derecho vulnerado)» en vez de «Tipología».
 - Pendiente: separar el consolidado en dos libros y cargar el documento «Derechos y deberes» de MiRed (ver `docs/PENDIENTES.md`).
-
-**Codigo_seguimiento_siau.gs** es el `dist/Codigo.gs` de la plataforma de evidencias (otra cuenta) con el puente (`doPost`) incluido: pégalo allá y despliega «Versión nueva».

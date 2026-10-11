@@ -119,21 +119,6 @@ function crear(hojas, gmail) {
         this.llamadas.push({ url, headers: op.headers, texto: (j.text && j.text.body) || "", json: j, whatsapp: true });
         return { getResponseCode: () => (falla ? 400 : 200), getContentText: () => (falla ? JSON.stringify({ error: { message: "Token vencido" } }) : "{}") };
       }
-      if (/script\.google\.com\/macros\/s\/[^/]+\/exec$/.test(url)) {   // plataforma de evidencias (otra cuenta): puente servidor a servidor
-        const j = JSON.parse(op.payload), seg = this.seg || (this.seg = { sesiones: {}, n: 0 });
-        this.llamadas.push({ url, json: j, seguimiento: true, metodo: op.method });
-        const resp = (obj) => ({ getResponseCode: () => 200, getContentText: () => (typeof obj === "string" ? obj : JSON.stringify(obj)) });
-        if (seg.falla) return resp("<html>Inicia sesión</html>");
-        if (j.ruta === "/api/login") {
-          if (j.cuerpo.usuario !== "puente.pqrs" || j.cuerpo.clave !== "ClaveDePrueba123") return resp({ ok: false, estado: 401, error: "Usuario o contraseña incorrectos." });
-          const t = "TOKEN" + (++seg.n) + "x".repeat(24); seg.sesiones[t] = 1; return resp({ ok: true, datos: { token: t, rol: "visor" } });
-        }
-        if (!seg.sesiones[j.token]) return resp({ ok: false, estado: 401, error: "Inicie sesión para continuar." });
-        if (j.ruta === "/api/panel") return resp({ ok: true, datos: { mes: j.q.mes, resumen: { siau: 15, evaluados: 14, estados: { cumple: 6, camino: 5, atencion: 3, ausente: 1 },
-          encuestas: { valor: 900, meta: 1260 }, charlas: { valor: 2100, meta: 2800 }, actas: { esperadas: 40, entregadas: 33 }, evidencias: { fotos: 20, documentos: 4, total: 22 } },
-          siau: [{ nombre: "NOMBRE QUE NO DEBE PASAR" }] } });
-        return resp({ ok: false, estado: 403, error: "no" });
-      }
       const j = JSON.parse(op.payload); this.llamadas.push({ url, texto: j.text || j.message || "", json: j }); return {}; } },
     DriveApp: (() => { const carpetas = {}; const archivosPorId = {};
       const mk = n => { const c = { nombre: n, archivos: [], vistas: [], getUrl: () => "https://drive.google.com/drive/folders/" + encodeURIComponent(n),

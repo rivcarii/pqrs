@@ -4016,23 +4016,27 @@ table.tb td.dos-l{min-width:120px}
 .cfg-fila .b{width:100%;justify-content:center}
 @media(max-width:600px){.seg{grid-template-columns:repeat(2,minmax(0,1fr))}.seg button{white-space:normal;padding:8px 10px;font-size:12px;line-height:1.2}}
 @media(max-width:1100px){.grid:has(>.interruptor){grid-template-columns:minmax(0,1fr)}}
-/* 7 · Seguimiento SIAU */
+/* 7 · Módulos (inicio general) */
 a.b{text-decoration:none;cursor:pointer}
 a.b.pri{background:var(--teal);color:#fff;border:0;box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 8px 20px rgba(0,96,129,.24)}
 a.b.pri:hover{background:#00546F}
 a.b.sec{background:rgba(0,96,129,.10);color:var(--teal)}
-.seg-par{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;align-items:stretch}
-.seg-card{display:flex;flex-direction:column;gap:14px}
-.seg-tit{font-size:20px;letter-spacing:-.02em;margin:0}
-.seg-lista{margin:0;padding-left:18px;display:grid;gap:8px;color:var(--ink-2);font-size:14px;line-height:1.45;flex:1}
-.seg-card .b{width:100%}
-.seg-conf{margin-top:14px;display:grid;gap:10px}
-.seg-cred{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-.seg-resumen{margin-bottom:14px}
-.seg-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
-.seg-kpis .n small{font-size:.5em;font-weight:600;color:var(--ink-3)}
-@media(max-width:900px){.seg-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.seg-cred{grid-template-columns:minmax(0,1fr)}}
-@media(max-width:800px){.seg-par{grid-template-columns:minmax(0,1fr)}}
+.hub-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr));gap:16px;align-items:stretch}
+.hub-card{display:flex;flex-direction:column;gap:10px;padding:clamp(18px,1.8vw,26px)}
+.hub-cab{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.hub-ico{display:inline-flex;color:var(--teal)}.hub-ico .ic{width:30px;height:30px}
+.hub-ins{font-size:12px;font-weight:600;color:var(--ink-3)}
+.hub-card h3{margin:6px 0 0;font-size:21px;letter-spacing:-.02em}
+.hub-desc{margin:0;color:var(--ink-2);font-size:14px;line-height:1.5}
+.hub-dato{margin:0;font-size:13px;font-weight:600;color:var(--teal-dark);min-height:1.3em}
+html[data-tema="oscuro"] .hub-dato{color:var(--ink)}
+.hub-pie{margin-top:auto;padding-top:6px}
+.hub-pie>.b{width:100%}
+.hub-botones{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.hub-botones .b{width:100%}
+.hub-vacia{border:1.5px dashed var(--line-2);background:transparent;box-shadow:none}
+.hub-vacia .hub-ico{color:var(--ink-3)}
+@media(max-width:420px){.hub-botones{grid-template-columns:minmax(0,1fr)}}
 </style>
 
 
@@ -4055,6 +4059,7 @@ a.b.sec{background:rgba(0,96,129,.10);color:var(--teal)}
   <symbol id="i-radicar" viewBox="0 0 24 24"><path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"/><path d="M14 3v5h5"/><path d="M12 11v6M9 14h6"/></symbol>
   <symbol id="i-tablero" viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></symbol>
   <symbol id="i-personas" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18.5 20a6.5 6.5 0 0 0-3-5.5"/></symbol>
+  <symbol id="i-modulos" viewBox="0 0 24 24"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></symbol>
   <symbol id="i-externo" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
   <symbol id="i-camara" viewBox="0 0 24 24"><path d="M4 8a1 1 0 0 1 1-1h2.5l1.5-2h6l1.5 2H19a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/><circle cx="12" cy="13" r="3.5"/></symbol>
   <symbol id="i-ajustes" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 0 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 0 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 0 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 0 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></symbol>
@@ -4147,6 +4152,7 @@ a.b.sec{background:rgba(0,96,129,.10);color:var(--teal)}
     <div class="lat-app"><img id="logoSiau" alt="SIAU" src=""><span><b>Gestión de PQRS</b>Oficina de Atención al Usuario</span></div>
   </div>
   <nav id="menu">
+    <button data-v="hub" data-perm="admin"><svg class="ic"><use href="#i-modulos"/></svg>Módulos</button>
     <p class="grupo">Operación</p>
     <button class="on" data-v="inicio"><svg class="ic"><use href="#i-inicio"/></svg>Inicio</button>
     <button data-v="bandeja"><svg class="ic"><use href="#i-bandeja"/></svg>Bandeja de PQRS</button>
@@ -4158,7 +4164,6 @@ a.b.sec{background:rgba(0,96,129,.10);color:var(--teal)}
     <button data-v="tablero"><svg class="ic"><use href="#i-tablero"/></svg>Tablero</button>
     <p class="grupo" data-perm="admin">Administración</p>
     <button data-v="responsables" data-perm="admin"><svg class="ic"><use href="#i-area"/></svg>Directorio de áreas</button>
-    <button data-v="seguimiento" data-perm="admin"><svg class="ic"><use href="#i-camara"/></svg>Seguimiento SIAU</button>
     <button data-v="usuarios" data-perm="admin"><svg class="ic"><use href="#i-personas"/></svg>Usuarios y sedes</button>
     <button data-v="config" data-perm="admin"><svg class="ic"><use href="#i-ajustes"/></svg>Configuración</button>
   </nav>
@@ -4458,12 +4463,11 @@ a.b.sec{background:rgba(0,96,129,.10);color:var(--teal)}
     </div>
   </section>
 
-  <!-- ===================== SEGUIMIENTO SIAU (solo administradores) ===================== -->
-  <section id="v-seguimiento" hidden>
-    <div class="cab-vista"><div><h2 class="vista">Seguimiento SIAU</h2>
-      <p class="sub">Evidencias del SIAU y de la Asociación de Usuarios: cumplimiento de cada sede, fototeca, personal y rotación.</p></div></div>
-    <div id="segAviso"></div>
-    <div id="segCuerpo"></div>
+  <!-- ===================== MÓDULOS (inicio general, solo administradores) ===================== -->
+  <section id="v-hub" hidden>
+    <div class="cab-vista"><div><h2 class="vista">Módulos</h2>
+      <p class="sub">Todo el SIAU en un solo lugar: cada tarjeta abre su módulo. Los externos se abren en otra pestaña, con sus propios accesos.</p></div></div>
+    <div id="hubCuerpo"></div>
   </section>
 
   <!-- ===================== CONFIGURACIÓN ===================== -->
@@ -4585,6 +4589,14 @@ a.b.sec{background:rgba(0,96,129,.10);color:var(--teal)}
     </div>
     <div class="card">
       <div id="cfgAviso"></div>
+      <fieldset><legend>Módulos externos</legend>
+        <p class="sub" style="margin:0 0 12px">Los módulos que viven en otro proyecto (y otra cuenta de Google) solo se enlazan desde Módulos: no se comparten datos ni sesiones.</p>
+        <label for="segUrl">Seguimiento SIAU · dirección de la aplicación web (termina en /exec)</label>
+        <input id="segUrl" spellcheck="false" autocomplete="off">
+        <div class="acciones"><button class="b pri" id="btnSegGuardar" type="button"><svg class="ic s"><use href="#i-check"/></svg>Guardar dirección</button>
+          <button class="b sec" id="btnSegRestablecer" type="button"><svg class="ic s"><use href="#i-actualizar"/></svg>Usar la predeterminada</button></div>
+        <div id="segAviso"></div>
+      </fieldset>
       <fieldset><legend>Estado del canal QR</legend>
         <p class="sub" style="margin:0 0 12px">Comprueba si las respuestas del formulario están entrando al consolidado y si el acuse automático puede salir.</p>
         <div class="acciones" style="margin-top:0">
@@ -4764,7 +4776,7 @@ function animarNumeros(raiz){ (raiz||document).querySelectorAll("[data-n]").forE
 /* ============================ navegación ============================ */
 var TITULOS = { inicio:["Inicio","Resumen de tus sedes"], bandeja:["Bandeja de PQRS","Gestión por etapas"], prioritarias:["Prioritarias","Riesgo vital, priorizadas y términos cortos"], correo:["Correo y EPS","Canal de correo unificado"],
   detalle:["Detalle de la PQRS","Gestión y trazabilidad"], radicar:["Radicar PQRS","Ventanilla, buzón y teléfono"], ficha:["Ficha del formulario","Para imprimir y ubicar en tu sede"], tablero:["Tablero","Indicadores por mes y sede"],
-  responsables:["Directorio de áreas","Quién recibe cada solicitud"], seguimiento:["Seguimiento SIAU","Evidencias y cumplimiento de las sedes"], usuarios:["Usuarios y sedes","Accesos a la plataforma"], config:["Configuración","Automatización y canales"] };
+  responsables:["Directorio de áreas","Quién recibe cada solicitud"], hub:["Módulos","Todo el SIAU en un solo lugar"], usuarios:["Usuarios y sedes","Accesos a la plataforma"], config:["Configuración","Automatización y canales"] };
 /* Pastilla que se desliza hasta el apartado activo del menú (movimiento en lugar de saltos). */
 function moverPastilla(){
   var menu = $("menu"); if(!menu) return;
@@ -4780,7 +4792,7 @@ function ver(v){
   if(permitido && permitido.hidden) v = "inicio";
   if(TITULOS[v]){ $("tituloVista").textContent = TITULOS[v][0]; $("subVista").textContent = TITULOS[v][1]; }
   cerrarLateral();
-  ["inicio","bandeja","prioritarias","correo","detalle","radicar","ficha","tablero","responsables","seguimiento","usuarios","config"].forEach(function(x){
+  ["inicio","bandeja","prioritarias","correo","detalle","radicar","ficha","tablero","responsables","hub","usuarios","config"].forEach(function(x){
     var s=$("v-"+x); if(!s) return;
     s.hidden = (x!==v);
     if(x===v){ s.classList.remove("anim"); void s.offsetWidth; s.classList.add("anim"); }
@@ -4797,7 +4809,7 @@ function ver(v){
   if(v==="prioritarias") cargarPrioritarias();
   if(v==="correo"){ $("vistaHilo").hidden = true; $("vistaLista").hidden = false; if(!APP.correosCargados) buscarCorreos(); }
   if(v==="responsables") pintarResponsables();
-  if(v==="seguimiento") cargarSeguimiento();
+  if(v==="hub") cargarHub();
   if(v==="usuarios") cargarUsuarios();
   if(v==="config"){ cargarAjustes(); cargarQR(); }
   window.scrollTo({top:0});
@@ -4837,7 +4849,7 @@ function arrancar(d){
   }
   $("leyendaTipos").innerHTML = TIPOS_ORDEN.map(tipoTag).join("");
   $("arranque").hidden = true;
-  ver("inicio");
+  ver(APP.sesion.puede && APP.sesion.puede.admin ? "hub" : "inicio");   /* administradores: inicio general con los módulos; el resto entra directo a PQRS */
   if($("bloqueExcel")){   /* administradores: consolidado completo + indicadores; técnicos y consulta: solo indicadores (sin datos de casos) */
     var esAdm = !!(d.sesion && d.sesion.puede && d.sesion.puede.admin);
     $("btnExportarExcel").hidden = !esAdm;
@@ -6823,7 +6835,7 @@ function activarVerClave(raiz){
     b.addEventListener("click", function(){ var i=$(b.dataset.verClave); i.type = i.type==="password" ? "text" : "password"; });
   });
 }
-var FRONT_VERSION = "9.8";
+var FRONT_VERSION = "9.9";
 function pintarVersion(estado){
   var el = $("accVersion");
   if(!el){ el = document.createElement("div"); el.id = "accVersion"; el.className = "hint"; el.style.cssText = "text-align:center;margin-top:10px;font-size:12px";
@@ -7015,79 +7027,57 @@ $("btnEscritorio").addEventListener("click", function(){
 });
 
 /* ============================ USUARIOS ============================ */
-/* ============================ SEGUIMIENTO SIAU (módulo solo para administradores) ============================
-   Es la plataforma de evidencias del SIAU y la Asociación de Usuarios: otro proyecto, en OTRA cuenta de Google, con su propia hoja, su carpeta
-   de fotos y sus accesos. Esta plataforma es el puente: el servidor consulta el resumen con una cuenta «Consulta» (el administrador no abre una
-   segunda sesión) y los botones abren la plataforma en otra pestaña. Solo lo ve el administrador; el servidor lo exige en cada llamada. */
-function cargarSeguimiento(){
-  $("segCuerpo").innerHTML = esqueleto(2);
-  srv("apiSeguimiento").then(function(r){ pintarSeguimiento(r); pedirResumenSeguimiento(false); })
-    .catch(function(e){ $("segCuerpo").innerHTML = ""; aviso("segAviso", msgErr(e), "err"); });
-}
-function pedirResumenSeguimiento(forzar){
-  var caja = $("segResumen"); if(!caja) return;
-  caja.innerHTML = '<div class="sk" style="height:96px"></div>';
-  srvSilencioso("apiSeguimientoResumen", !!forzar).then(function(r){ pintarResumenSeguimiento(r); })
-    .catch(function(e){ caja.innerHTML = '<div class="aviso err">'+ic("alerta","s")+'<div>'+msgErr(e)+'</div></div>'; });
-}
-function pintarResumenSeguimiento(r){
-  var caja = $("segResumen"); if(!caja) return;
-  if(!r || r.ok === false){ caja.innerHTML = '<div class="aviso err">'+ic("alerta","s")+'<div>'+esc((r && r.mensaje) || "No se pudo leer el resumen.")+'</div></div>'; return; }
-  if(!r.conectado){
-    caja.innerHTML = r.motivo === "sin_credenciales"
-      ? '<div class="aviso info">'+ic("alerta","s")+'<div>Conecta el puente para ver aquí el resumen del mes: en la plataforma de evidencias crea un acceso con rol <b>Consulta</b> y pega su usuario y contraseña en «Conexión», más abajo.</div></div>'
-      : '<div class="aviso err">'+ic("alerta","s")+'<div><b>Sin conexión con la plataforma de evidencias.</b> '+esc(r.mensaje||"")+'</div></div>';
-    return;
-  }
-  var x = r.resumen, e = x.estados || {}, pct = function(a,b){ return b ? Math.round(100*a/b)+" %" : "—"; };
-  var k = function(et, n, pie){ return '<div class="kmini"><span class="et">'+et+'</span><span class="n">'+n+'</span><span class="pie">'+pie+'</span></div>'; };
-  caja.innerHTML = '<div class="card-tit" style="margin-bottom:10px"><h3>'+ic("pulso")+'Resumen de '+esc(x.mes)+'</h3><span class="chip v">Conectado</span></div>'+
-    '<div class="seg-kpis">'+
-      k("SIAU que cumplen", (e.cumple||0)+'<small> de '+x.evaluados+'</small>', (e.camino||0)+' en camino · '+(e.atencion||0)+' requieren atención')+
-      k("Encuestas", x.encuestas.valor, x.encuestas.meta ? pct(x.encuestas.valor, x.encuestas.meta)+' de la meta ('+x.encuestas.meta+')' : "Sin meta")+
-      k("Charlas", x.charlas.valor, x.charlas.meta ? pct(x.charlas.valor, x.charlas.meta)+' de la meta ('+x.charlas.meta+')' : "Sin meta")+
-      k("Evidencias del mes", (x.evidencias&&x.evidencias.total)||0, x.actas ? 'Actas de buzón '+x.actas.entregadas+' de '+x.actas.esperadas : "Fotos y documentos cargados")+
-    '</div>'+(r.desdeCache ? '' : '');
-}
-function pintarSeguimiento(r){
-  if(!r || r.ok === false){ $("segCuerpo").innerHTML = ""; aviso("segAviso", esc((r && r.mensaje) || "No se pudo cargar el enlace."), "err"); return; }
-  var bloque = function(titulo, lista, boton, url, primario){
-    return '<div class="card seg-card"><h3 class="seg-tit">'+titulo+'</h3><ul class="seg-lista">'+lista.map(function(x){ return '<li>'+x+'</li>'; }).join("")+'</ul>'+
-      '<a class="b '+(primario?'pri':'sec')+'" href="'+esc(url)+'" target="_blank" rel="noopener noreferrer">'+ic("externo","s")+boton+'</a></div>';
+/* ============================ MÓDULOS · INICIO GENERAL (solo administradores) ============================
+   Cada módulo es una entrada de MODULOS. Los internos viven en esta plataforma (se abren con ver()); los externos son otros proyectos, a veces en
+   otra cuenta de Google: aquí solo se ENLAZAN (se abren en otra pestaña, con sus propios accesos). No se incrustan ni se comparten datos.
+   Para sumar un módulo: una entrada aquí, y si es externo, su dirección desde el servidor (apiSeguimiento es el ejemplo). */
+var MODULOS = [
+  { id:"pqrs", nombre:"Sistema de PQRS", icono:"bandeja", tipo:"interno", insignia:"En esta plataforma", destino:"inicio", boton:"Abrir PQRS",
+    desc:"Peticiones, quejas, reclamos, sugerencias y felicitaciones: radicar, direccionar, responder y vigilar los términos." },
+  { id:"seguimiento", nombre:"Seguimiento SIAU", icono:"camara", tipo:"externo", perm:"admin", insignia:"Se abre en otra pestaña", api:"apiSeguimiento",
+    desc:"Evidencias del SIAU y de la Asociación de Usuarios: cumplimiento de cada sede, fototeca, personal y rotación." }
+];
+function cargarHub(){
+  var p = (APP.sesion && APP.sesion.puede) || {};
+  var visibles = MODULOS.filter(function(m){ return !m.perm || p[m.perm]; });
+  var tarjeta = function(m){
+    var pie = m.tipo === "interno"
+      ? '<button class="b pri" type="button" data-hub-ir="'+esc(m.destino)+'">'+ic("flecha","s")+esc(m.boton)+'</button>'
+      : '<div class="hub-botones" data-hub-enlaces="'+esc(m.id)+'"><span class="b sec" aria-busy="true">Cargando enlaces…</span></div>';
+    return '<article class="card hub-card" data-modulo="'+esc(m.id)+'"><div class="hub-cab"><span class="hub-ico">'+ic(m.icono)+'</span><span class="hub-ins">'+esc(m.insignia)+'</span></div>'+
+      '<h3>'+esc(m.nombre)+'</h3><p class="hub-desc">'+esc(m.desc)+'</p><p class="hub-dato" data-hub-dato="'+esc(m.id)+'"></p><div class="hub-pie">'+pie+'</div></article>';
   };
-  $("segCuerpo").innerHTML =
-    '<div class="card seg-resumen anim"><div id="segResumen"></div>'+
-      '<div class="acciones"><button class="b sec" id="btnSegActualizar" type="button">'+ic("actualizar","s")+'Actualizar resumen</button></div></div>'+
-    '<div class="seg-par anim">'+
-      bloque("Visor", ["Tablero con indicadores y tendencias de 12 meses","Cumplimiento de cada SIAU en las 40 sedes","Consultas por mes, sede o frase y reportes descargables","Fototeca de fotografías y documentos"], "Abrir el visor", r.visor, true)+
-      bloque("Administrador", ["Cargar evidencias con fotos","Personal, sedes por SIAU, vacaciones y licencias","Metas, nombres de sede y actualización de consolidados","Accesos con usuario y contraseña"], "Abrir el administrador", r.admin, false)+
-    '</div>'+
-    '<div class="card seg-conf anim"><div class="card-tit"><h3>Conexión</h3><span class="d">'+(r.personalizado ? "Dirección personalizada" : "Dirección predeterminada")+'</span></div>'+
-      '<p class="sub" style="margin:0">La plataforma de evidencias corre en otra cuenta de Google. Esta plataforma la consulta desde el servidor con una cuenta de solo lectura, así no hay choques de sesión en el navegador.</p>'+
-      '<label for="segUrl">Dirección de la aplicación web (termina en /exec)</label><input id="segUrl" value="'+esc(r.visor)+'" spellcheck="false" autocomplete="off">'+
-      '<div class="seg-cred"><div><label for="segUsuario">Usuario del puente (rol Consulta)</label><input id="segUsuario" value="'+esc(r.usuario||"")+'" placeholder="p. ej. puente.pqrs" autocomplete="off" spellcheck="false"></div>'+
-      '<div><label for="segClave">Contraseña</label><input id="segClave" type="password" placeholder="'+(r.claveGuardada ? "Guardada: déjala vacía para conservarla" : "Pégala aquí")+'" autocomplete="new-password"></div></div>'+
-      '<div class="acciones"><button class="b pri" id="btnSegGuardar" type="button">'+ic("check","s")+'Guardar conexión</button>'+
-      '<button class="b sec" id="btnSegProbar" type="button">'+ic("pulso","s")+'Probar conexión</button>'+
-      '<button class="b sec" id="btnSegRestablecer" type="button">'+ic("actualizar","s")+'Dirección predeterminada</button></div>'+
-      '<p class="hint" style="margin:0">En la plataforma de evidencias: Administrar ▸ Accesos ▸ crea el acceso «Consulta». La contraseña se guarda solo en esta plataforma y no vuelve a mostrarse.</p></div>';
-  var guardar = function(datos, btn, probar){
-    var fin = ocupado(btn, probar ? "Probando…" : "Guardando…");
-    srv("apiGuardarSeguimiento", datos).then(function(x){
-      if(!x.ok){ fin(); aviso("segAviso", esc(x.mensaje), "err"); return null; }
-      return probar ? srv("apiProbarSeguimiento") : x;
-    }).then(function(x){
-      fin(); if(!x) return;
-      aviso("segAviso", esc(probar ? x.mensaje : "Conexión guardada."), (probar && !x.conectado) ? "err" : "ok");
-      pintarSeguimiento(x.visor ? x : x); pintarResumenSeguimiento(x.resumen !== undefined || x.conectado !== undefined ? x : { ok:true, conectado:false, motivo:"sin_credenciales" });
-      if(!probar) pedirResumenSeguimiento(true);
+  var proximo = p.admin ? '<article class="card hub-card hub-vacia" data-modulo="proximo"><div class="hub-cab"><span class="hub-ico">'+ic("modulos")+'</span><span class="hub-ins">Próximamente</span></div>'+
+    '<h3>Próximos módulos</h3><p class="hub-desc">Aquí aparecerán los módulos que se integren, para gestionarlos todos desde este inicio.</p></article>' : '';
+  $("hubCuerpo").innerHTML = '<div class="hub-grid anim-lista">'+visibles.map(tarjeta).join("")+proximo+'</div>';
+  $("hubCuerpo").querySelectorAll("[data-hub-ir]").forEach(function(b){ b.addEventListener("click", function(){ ver(b.dataset.hubIr); }); });
+  /* PQRS: tres cifras para decidir por dónde empezar */
+  srvSilencioso("apiResumenHoy").then(function(r){
+    var d = document.querySelector('[data-hub-dato="pqrs"]'); if(!d || !r) return;
+    d.textContent = (r.sinDireccionar||0)+" sin direccionar · "+(r.vencidas||0)+" vencidas · "+(r.prioritariasAbiertas||0)+" prioritarias";
+  }).catch(function(){});
+  /* Externos: la dirección la entrega el servidor solo al administrador */
+  visibles.filter(function(m){ return m.tipo === "externo"; }).forEach(function(m){
+    srvSilencioso(m.api).then(function(r){
+      var c = document.querySelector('[data-hub-enlaces="'+m.id+'"]'); if(!c) return;
+      if(!r || r.ok === false){ c.innerHTML = '<span class="hint">'+esc((r && r.mensaje) || "No se pudo cargar el enlace.")+'</span>'; return; }
+      c.innerHTML = '<a class="b pri" href="'+esc(r.visor)+'" target="_blank" rel="noopener noreferrer">'+ic("externo","s")+'Abrir el visor</a>'+
+        '<a class="b sec" href="'+esc(r.admin)+'" target="_blank" rel="noopener noreferrer">'+ic("externo","s")+'Administrador</a>';
+    }).catch(function(e){ var c = document.querySelector('[data-hub-enlaces="'+m.id+'"]'); if(c) c.innerHTML = '<span class="hint">'+msgErr(e)+'</span>'; });
+  });
+}
+/* Configuración ▸ Módulos externos: dirección de Seguimiento SIAU */
+function cargarModulosExternos(){
+  srvSilencioso("apiSeguimiento").then(function(r){ if(r && r.visor && $("segUrl")) $("segUrl").value = r.visor; }).catch(function(){});
+  var guardar = function(valor, btn){
+    var fin = ocupado(btn, "Guardando…");
+    srv("apiGuardarSeguimiento", valor).then(function(x){ fin();
+      if(!x.ok){ aviso("segAviso", esc(x.mensaje), "err"); return; }
+      $("segUrl").value = x.visor; aviso("segAviso", x.personalizado ? "Dirección guardada." : "Se usa la dirección predeterminada.", "ok");
     }).catch(function(e){ fin(); aviso("segAviso", msgErr(e), "err"); });
   };
-  var datos = function(){ var d = { url: $("segUrl").value, usuario: $("segUsuario").value }; if($("segClave").value) d.clave = $("segClave").value; return d; };
-  $("btnSegGuardar").onclick = function(){ guardar(datos(), "btnSegGuardar", false); };
-  $("btnSegProbar").onclick = function(){ guardar(datos(), "btnSegProbar", true); };
-  $("btnSegRestablecer").onclick = function(){ guardar({ url: "" }, "btnSegRestablecer", false); };
-  $("btnSegActualizar").onclick = function(){ pedirResumenSeguimiento(true); };
+  $("btnSegGuardar").onclick = function(){ guardar($("segUrl").value, "btnSegGuardar"); };
+  $("btnSegRestablecer").onclick = function(){ guardar("", "btnSegRestablecer"); };
 }
 function cargarUsuarios(){
   $("usrLista").innerHTML = esqueleto(3);
@@ -7255,6 +7245,7 @@ function cargarAjustes(){
   $("tablaEntidades").innerHTML = esqueleto(3);
   srv("apiAjustes").then(pintarAjustes).catch(function(e){ aviso("autoAviso", msgErr(e), "err"); });
   srvSilencioso("apiWhatsappEstado").then(pintarWa).catch(function(){});
+  cargarModulosExternos();
 }
 function pintarWa(r){
   if(!r || r.ok === false) return;
@@ -7577,8 +7568,8 @@ html[data-form="movil"] .rv-tour{bottom:calc(86px + env(safe-area-inset-bottom,0
       d:"<ol><li>Entra a <b>Usuarios y sedes</b> y crea el usuario con su rol (Técnico, Consulta o Administrador).</li><li>Asígnale las sedes que podrá ver.</li><li>La persona recibe un correo de bienvenida y debe <b>cambiar su contraseña temporal</b> al ingresar.</li></ol>" },
     { t:"Cómo configuro las áreas responsables", v:"responsables", p:"admin", k:"directorio areas responsables reglas direccionamiento servicios palabras clave copias correo jefe",
       d:"<p>El <b>Directorio de áreas</b> define quién recibe cada solicitud: servicios, sedes, palabras clave y correos en copia. Entre más completo esté, mejores serán las sugerencias de direccionamiento.</p>" },
-    { t:"Qué es Seguimiento SIAU", v:"seguimiento", p:"admin", k:"seguimiento siau evidencias asociacion usuarios fototeca cumplimiento encuestas charlas rotacion personal sedes visor administrador plataforma",
-      d:"<p><b>Seguimiento SIAU</b> abre la plataforma de evidencias del SIAU y la Asociación de Usuarios: cumplimiento de cada sede, fototeca, personal y rotación. Es una plataforma aparte con sus propios accesos y solo la ven los administradores. Entra con el usuario que te creó allí.</p>" },
+    { t:"Qué es la pantalla de Módulos", v:"hub", p:"admin", k:"modulos modulo inicio general tarjetas seguimiento siau evidencias asociacion usuarios plataforma abrir integrar un solo lugar fototeca cumplimiento",
+      d:"<p><b>Módulos</b> es el inicio general del administrador: una tarjeta por módulo. <b>Sistema de PQRS</b> se abre aquí mismo; <b>Seguimiento SIAU</b> (evidencias y cumplimiento de las sedes) es otra plataforma, con otra cuenta de Google, y se abre en una pestaña nueva con sus propios accesos. Los módulos nuevos aparecerán como tarjetas.</p>" },
     { t:"Qué se configura en Configuración", v:"config", p:"admin", k:"configuracion automatizacion avisos google chat push ntfy whatsapp respaldo entidades categorias qr ajustes",
       d:"<p><b>Configuración</b> reúne la automatización del correo (EPS, entes, usuarios, citas), los avisos por Google Chat y push, el WhatsApp, el respaldo diario en Drive y la tabla de entidades y categorías.</p>" },
     { t:"Cómo cambio mi contraseña o el tema", v:"inicio", sel:"#btnPerfil", k:"contrasena clave cambiar password tema oscuro claro apariencia instalar app celular cerrar sesion perfil salir",
@@ -7606,7 +7597,7 @@ html[data-form="movil"] .rv-tour{bottom:calc(86px + env(safe-area-inset-bottom,0
     tablero:["Los números de tus sedes","Cambia de mes o de año y descarga el Excel de indicadores cuando lo necesites."],
     responsables:["Quién recibe qué","Entre más completo el directorio, mejor se sugiere el área al direccionar."],
     usuarios:["Crea accesos con cuidado","Cada persona tiene su usuario, su rol y sus sedes. La contraseña temporal se cambia al primer ingreso."],
-    seguimiento:["Una plataforma aparte","Aquí abres el visor o el administrador de las evidencias del SIAU. Tiene su propia base de datos y sus propios accesos: entra con el usuario que se creó allí."],
+    hub:["Todo en un solo lugar","Cada tarjeta es un módulo del SIAU. PQRS se abre en esta plataforma; los módulos externos se abren en otra pestaña con sus propios accesos."],
     config:["Automatiza con calma","Aquí se configuran los avisos, el correo automático y los respaldos. Cada interruptor tiene una explicación."]
   };
   function pasos(){
@@ -7617,10 +7608,11 @@ html[data-form="movil"] .rv-tour{bottom:calc(86px + env(safe-area-inset-bottom,0
       { t:"Bandeja de PQRS", d:"Aquí gestionas los casos por etapas: sin direccionar, en gestión, por responder y cerradas. El semáforo te dice cuáles se vencen.", v:"bandeja", foco:'#menu [data-v="bandeja"]', fm:'.tabbar [data-v="bandeja"]' },
       { t:"Prioritarias", d:"Riesgo vital, tutelas y requerimientos. Son las primeras que debes atender.", v:"prioritarias", foco:'#menu [data-v="prioritarias"]' }
     ];
+    if(p.admin) s.splice(2, 0, { t:"Módulos", d:"Este es tu inicio como administrador: una tarjeta por módulo del SIAU. PQRS se abre en esta plataforma y los módulos externos se abren en otra pestaña.", v:"hub", foco:'#menu [data-v="hub"]' });
     if(p.radicar) s.push({ t:"Radicar PQRS", d:"Cuando un usuario te entregue una PQRS en la ventanilla, el buzón o por teléfono, regístrala aquí. El radicado y el término se calculan solos.", v:"radicar", foco:'#menu [data-v="radicar"]', fm:'.tabbar [data-v="radicar"]' });
     if(p.correo) s.push({ t:"Correo y EPS", d:"Los correos llegan clasificados. A las EPS y entes de control el sistema no les escribe: tú decides y respondes.", v:"correo", foco:'#menu [data-v="correo"]', fm:'.tabbar [data-v="correo"]' });
     s.push({ t:"Tablero e indicadores", d:"Gráficos por mes, sede y tipo, y la descarga del Excel de indicadores.", v:"tablero", foco:'#menu [data-v="tablero"]' });
-    if(p.admin) s.push({ t:"Administración", d:"Como administrador creas usuarios y sedes, ordenas el directorio de áreas, abres el Seguimiento SIAU (evidencias de las sedes) y configuras los avisos y la automatización.", v:"usuarios", foco:'#menu [data-v="usuarios"]' });
+    if(p.admin) s.push({ t:"Administración", d:"Como administrador creas usuarios y sedes, ordenas el directorio de áreas y configuras los avisos y la automatización.", v:"usuarios", foco:'#menu [data-v="usuarios"]' });
     s.push({ t:"Tu perfil", d:"Toca tu avatar para cambiar la contraseña, elegir el tema (claro, oscuro…) o instalar la app en tu celular.", v:"inicio", foco:"#btnPerfil", menu:true });
     s.push({ t:"Cuando te pierdas, búscame", d:"Toca mi botón y pregúntame, por ejemplo: «cómo radico», «qué es el semáforo» o «dónde descargo el Excel». Te explico y te llevo a la opción." });
     return s;

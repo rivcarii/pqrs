@@ -31,8 +31,8 @@ require("fs").mkdirSync(CAP, { recursive: true });
     if (ing.boton > ing.vp) errores.push(w + " el botón Ingresar queda fuera de la pantalla: " + Math.round(ing.boton) + " > " + ing.vp);
     const entrar = async (u) => {
       await p.fill("#a_usuario", u); await p.fill("#a_clave", "Demo2026"); await p.click("#btnAcceso");
-      try { await p.waitForSelector("#v-inicio:not([hidden]) .hero", { timeout: 15000 }); }
-      catch (e) { await p.screenshot({ path: CAP + "z_fallo_" + w + ".png" }); console.log(JSON.stringify(await p.evaluate(() => ({ app: document.getElementById("app").hidden, acc: document.getElementById("acceso").hidden, aviso: document.getElementById("accAviso").textContent, arr: document.getElementById("arranque").hidden, rect: document.querySelector("#v-inicio .hero") && JSON.stringify(document.querySelector("#v-inicio .hero").getBoundingClientRect()) })))); console.log(errores.join("\n")); throw e; } await p.waitForSelector("#meses .mes", { timeout: 15000 }); await p.waitForTimeout(900);
+      try { await p.waitForSelector("#v-hub:not([hidden]) .hub-card, #v-inicio:not([hidden]) .hero", { timeout: 15000 }); }
+      catch (e) { await p.screenshot({ path: CAP + "z_fallo_" + w + ".png" }); console.log(JSON.stringify(await p.evaluate(() => ({ app: document.getElementById("app").hidden, acc: document.getElementById("acceso").hidden, aviso: document.getElementById("accAviso").textContent, arr: document.getElementById("arranque").hidden, rect: document.querySelector("#v-inicio .hero") && JSON.stringify(document.querySelector("#v-inicio .hero").getBoundingClientRect()) })))); console.log(errores.join("\n")); throw e; } if (await p.$eval("#v-inicio", e => !e.hidden)) await p.waitForSelector("#meses .mes", { timeout: 15000 }); await p.waitForTimeout(900);
     };
     await entrar("siau.admin");
 
@@ -47,19 +47,24 @@ require("fs").mkdirSync(CAP, { recursive: true });
       if (a1.uBottom > a1.alto || a2.uTop !== a1.uTop || a2.kTop !== a1.kTop) errores.push(w + " la cuenta o el logo se mueven con el menú: " + JSON.stringify([a1, a2]));
       await p.setViewportSize({ width: w, height: 900 }); await p.waitForTimeout(200);
     }
-    // v9.8 · Seguimiento SIAU: solo administradores; abre la plataforma de evidencias en otra pestaña
+    // v9.9 · Inicio general: el administrador entra a Módulos; PQRS se abre dentro y Seguimiento SIAU redirige a otra pestaña
     {
-      const irS = async () => { if (w <= 1000) { await p.click("#btnMenu"); await p.waitForTimeout(300); } await p.click('#menu button[data-v="seguimiento"]'); await p.waitForTimeout(500); };
-      await irS(); await p.waitForSelector("#segCuerpo .seg-card", { timeout: 8000 }).catch(() => errores.push(w + " el módulo Seguimiento SIAU no se pinta"));
-      const enl = await p.$$eval("#segCuerpo .seg-card a.b", els => els.map(e => ({ h: e.getAttribute("href"), t: e.target, r: e.rel })));
+      if (await p.$eval("#v-hub", e => e.hidden)) errores.push(w + " el administrador no aterriza en Módulos");
+      const tarjetas = await p.$$eval("#hubCuerpo .hub-card", els => els.map(e => e.dataset.modulo));
+      if (tarjetas.join() !== "pqrs,seguimiento,proximo") errores.push(w + " tarjetas de módulos inesperadas: " + tarjetas);
+      await p.waitForSelector('#hubCuerpo [data-hub-enlaces="seguimiento"] a', { timeout: 8000 }).catch(() => errores.push(w + " la tarjeta de Seguimiento SIAU no trae sus enlaces"));
+      const enl = await p.$$eval('#hubCuerpo [data-hub-enlaces="seguimiento"] a', els => els.map(e => ({ h: e.getAttribute("href"), t: e.target, r: e.rel })));
       if (enl.length !== 2 || !/^https:\/\/script\.google\.com\/macros\/s\/[^/]+\/exec$/.test(enl[0].h) || !/\?pagina=admin$/.test(enl[1].h) || enl.some(x => x.t !== "_blank" || !/noopener/.test(x.r)))
-        errores.push(w + " los enlaces de Seguimiento SIAU no son los esperados: " + JSON.stringify(enl));
-      await p.waitForSelector("#segResumen .aviso", { timeout: 6000 }).catch(() => errores.push(w + " Seguimiento SIAU no explica cómo conectar el puente"));
-      if (!/Conecta el puente/.test(await p.textContent("#segResumen").catch(() => ""))) errores.push(w + " sin el aviso de conexión pendiente del puente");
-      await desb("seguimiento"); if (w === 1366 || w === 390) await p.screenshot({ path: CAP + `z_${w}_seguimiento.png`, fullPage: true });
+        errores.push(w + " los enlaces de Seguimiento SIAU no redirigen como se espera: " + JSON.stringify(enl));
+      await p.waitForFunction(() => /vencidas/.test((document.querySelector('[data-hub-dato="pqrs"]') || {}).textContent || ""), null, { timeout: 8000 }).catch(() => errores.push(w + " la tarjeta de PQRS no muestra sus cifras"));
+      const alt = await p.$$eval("#hubCuerpo .hub-card", els => els.map(e => Math.round(e.getBoundingClientRect().height)));
+      await p.waitForTimeout(400); await desb("modulos"); if (w === 1366 || w === 390) await p.screenshot({ path: CAP + `z_${w}_modulos.png`, fullPage: true });
+      await p.click('#hubCuerpo [data-hub-ir="inicio"]'); await p.waitForSelector("#v-inicio:not([hidden]) .hero", { timeout: 10000 }).catch(() => errores.push(w + " «Abrir PQRS» no abre el inicio de PQRS"));
+      // configuración de la dirección: solo acepta direcciones /exec de Apps Script
+      await p.evaluate(() => ver("config")); await p.waitForSelector("#segUrl", { timeout: 6000 });
       await p.fill("#segUrl", "https://ejemplo.com/exec"); await p.click("#btnSegGuardar");
-      await p.waitForSelector("#segAviso .aviso.err", { timeout: 5000 }).catch(() => errores.push(w + " Seguimiento SIAU acepta una dirección que no es de Apps Script"));
-      await p.evaluate(() => ver("inicio"));
+      await p.waitForSelector("#segAviso .aviso.err", { timeout: 5000 }).catch(() => errores.push(w + " Módulos externos acepta una dirección que no es de Apps Script"));
+      await p.evaluate(() => ver("inicio")); await p.waitForSelector("#v-inicio:not([hidden]) .hero", { timeout: 10000 }); await p.waitForSelector("#meses .mes", { timeout: 15000 }); await p.waitForTimeout(500);
     }
     // v9.3 · Riverino: botón, búsqueda, «Llévame», recorrido de bienvenida y consejos de primera vez
     await p.waitForSelector("#riverino", { timeout: 6000 }).catch(() => errores.push(w + " no aparece el botón de Riverino"));
@@ -194,7 +199,8 @@ require("fs").mkdirSync(CAP, { recursive: true });
     if ((await p.textContent("#detalleCuerpo")).trim()) errores.push(w + " quedaron datos del usuario anterior");
     await entrar("tecnico.playa");
     const visibles = await p.$$eval('#menu button[data-v]', els => els.filter(e => !e.hidden).map(e => e.dataset.v));
-    if (visibles.includes("usuarios") || visibles.includes("correo") || visibles.includes("seguimiento")) errores.push(w + " técnico ve módulos de administración: " + visibles);
+    if (visibles.includes("usuarios") || visibles.includes("correo") || visibles.includes("hub")) errores.push(w + " técnico ve módulos de administración: " + visibles);
+    if (await p.$eval("#v-hub", e => !e.hidden)) errores.push(w + " el técnico aterrizó en Módulos en lugar de PQRS");
     { const rr = await p.evaluate(() => srv("apiSeguimiento").then(r => JSON.stringify(r), e => "rechazado"));
       if (/script\.google\.com/.test(rr)) errores.push(w + " el técnico pudo pedir el enlace de Seguimiento SIAU por la API: " + rr); }
     await desb("inicio técnico"); if (w === 1366 || w === 390) await p.screenshot({ path: CAP + `z_${w}_inicio_tecnico.png`, fullPage: true });

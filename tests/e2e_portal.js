@@ -35,7 +35,7 @@ const API = "https://script.google.com/macros/s/PRUEBA/exec";
   await p.waitForSelector("#a_nombre", { timeout: 15000 });   // sin usuarios: pide crear el administrador
   await p.fill("#a_nombre", "Admin Portal"); await p.fill("#a_usuario", "admin.portal"); await p.fill("#a_correo", "admin@correo.com");
   await p.fill("#a_clave", "Portal2026"); await p.fill("#a_clave2", "Portal2026"); await p.click("#btnAcceso");
-  await p.waitForSelector("#v-inicio:not([hidden]) .hero", { timeout: 20000 }).catch(async (e) => { errores.push("no cargó el inicio: " + (await p.textContent("#accAviso"))); });
+  await p.waitForSelector("#v-hub:not([hidden]) .hub-card", { timeout: 20000 }).catch(async (e) => { errores.push("no cargó el inicio: " + (await p.textContent("#accAviso"))); });
   const r = await p.evaluate(() => fetch("https://script.google.com/macros/s/PRUEBA/exec", { method: "POST", body: JSON.stringify({ fn: "_hash_", args: ["x", "y"] }) }).then(x => x.json()));
   if (!r.__error) errores.push("el portal permitió llamar una función interna");
   if (llamadas < 3) errores.push("pocas llamadas al backend: " + llamadas);
