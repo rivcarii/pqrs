@@ -16,6 +16,8 @@
   <symbol id="i-radicar" viewBox="0 0 24 24"><path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"/><path d="M14 3v5h5"/><path d="M12 11v6M9 14h6"/></symbol>
   <symbol id="i-tablero" viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></symbol>
   <symbol id="i-personas" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18.5 20a6.5 6.5 0 0 0-3-5.5"/></symbol>
+  <symbol id="i-externo" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
+  <symbol id="i-camara" viewBox="0 0 24 24"><path d="M4 8a1 1 0 0 1 1-1h2.5l1.5-2h6l1.5 2H19a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/><circle cx="12" cy="13" r="3.5"/></symbol>
   <symbol id="i-ajustes" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 0 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 0 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 0 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 0 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></symbol>
   <symbol id="i-campana" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/></symbol>
   <symbol id="i-actualizar" viewBox="0 0 24 24"><path d="M21 12a9 9 0 0 1-15.5 6.2L3 16"/><path d="M3 12a9 9 0 0 1 15.5-6.2L21 8"/><path d="M21 3v5h-5M3 21v-5h5"/></symbol>
@@ -117,6 +119,7 @@
     <button data-v="tablero"><svg class="ic"><use href="#i-tablero"/></svg>Tablero</button>
     <p class="grupo" data-perm="admin">Administración</p>
     <button data-v="responsables" data-perm="admin"><svg class="ic"><use href="#i-area"/></svg>Directorio de áreas</button>
+    <button data-v="seguimiento" data-perm="admin"><svg class="ic"><use href="#i-camara"/></svg>Seguimiento SIAU</button>
     <button data-v="usuarios" data-perm="admin"><svg class="ic"><use href="#i-personas"/></svg>Usuarios y sedes</button>
     <button data-v="config" data-perm="admin"><svg class="ic"><use href="#i-ajustes"/></svg>Configuración</button>
   </nav>
@@ -414,6 +417,14 @@
           <button class="b sec mini" id="btnAudActualizar" type="button"><svg class="ic s"><use href="#i-actualizar"/></svg>Actualizar</button></div></div>
       <div class="aud" id="audLista"></div>
     </div>
+  </section>
+
+  <!-- ===================== SEGUIMIENTO SIAU (solo administradores) ===================== -->
+  <section id="v-seguimiento" hidden>
+    <div class="cab-vista"><div><h2 class="vista">Seguimiento SIAU</h2>
+      <p class="sub">Evidencias del SIAU y de la Asociación de Usuarios: cumplimiento de cada sede, fototeca, personal y rotación.</p></div></div>
+    <div id="segAviso"></div>
+    <div id="segCuerpo"></div>
   </section>
 
   <!-- ===================== CONFIGURACIÓN ===================== -->

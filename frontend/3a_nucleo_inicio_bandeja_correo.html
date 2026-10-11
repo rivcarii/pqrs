@@ -131,7 +131,7 @@ function animarNumeros(raiz){ (raiz||document).querySelectorAll("[data-n]").forE
 /* ============================ navegación ============================ */
 var TITULOS = { inicio:["Inicio","Resumen de tus sedes"], bandeja:["Bandeja de PQRS","Gestión por etapas"], prioritarias:["Prioritarias","Riesgo vital, priorizadas y términos cortos"], correo:["Correo y EPS","Canal de correo unificado"],
   detalle:["Detalle de la PQRS","Gestión y trazabilidad"], radicar:["Radicar PQRS","Ventanilla, buzón y teléfono"], ficha:["Ficha del formulario","Para imprimir y ubicar en tu sede"], tablero:["Tablero","Indicadores por mes y sede"],
-  responsables:["Directorio de áreas","Quién recibe cada solicitud"], usuarios:["Usuarios y sedes","Accesos a la plataforma"], config:["Configuración","Automatización y canales"] };
+  responsables:["Directorio de áreas","Quién recibe cada solicitud"], seguimiento:["Seguimiento SIAU","Evidencias y cumplimiento de las sedes"], usuarios:["Usuarios y sedes","Accesos a la plataforma"], config:["Configuración","Automatización y canales"] };
 /* Pastilla que se desliza hasta el apartado activo del menú (movimiento en lugar de saltos). */
 function moverPastilla(){
   var menu = $("menu"); if(!menu) return;
@@ -147,7 +147,7 @@ function ver(v){
   if(permitido && permitido.hidden) v = "inicio";
   if(TITULOS[v]){ $("tituloVista").textContent = TITULOS[v][0]; $("subVista").textContent = TITULOS[v][1]; }
   cerrarLateral();
-  ["inicio","bandeja","prioritarias","correo","detalle","radicar","ficha","tablero","responsables","usuarios","config"].forEach(function(x){
+  ["inicio","bandeja","prioritarias","correo","detalle","radicar","ficha","tablero","responsables","seguimiento","usuarios","config"].forEach(function(x){
     var s=$("v-"+x); if(!s) return;
     s.hidden = (x!==v);
     if(x===v){ s.classList.remove("anim"); void s.offsetWidth; s.classList.add("anim"); }
@@ -164,6 +164,7 @@ function ver(v){
   if(v==="prioritarias") cargarPrioritarias();
   if(v==="correo"){ $("vistaHilo").hidden = true; $("vistaLista").hidden = false; if(!APP.correosCargados) buscarCorreos(); }
   if(v==="responsables") pintarResponsables();
+  if(v==="seguimiento") cargarSeguimiento();
   if(v==="usuarios") cargarUsuarios();
   if(v==="config"){ cargarAjustes(); cargarQR(); }
   window.scrollTo({top:0});

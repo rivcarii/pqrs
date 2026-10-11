@@ -14,7 +14,7 @@ function activarVerClave(raiz){
     b.addEventListener("click", function(){ var i=$(b.dataset.verClave); i.type = i.type==="password" ? "text" : "password"; });
   });
 }
-var FRONT_VERSION = "9.7";
+var FRONT_VERSION = "9.8";
 function pintarVersion(estado){
   var el = $("accVersion");
   if(!el){ el = document.createElement("div"); el.id = "accVersion"; el.className = "hint"; el.style.cssText = "text-align:center;margin-top:10px;font-size:12px";
@@ -206,6 +206,80 @@ $("btnEscritorio").addEventListener("click", function(){
 });
 
 /* ============================ USUARIOS ============================ */
+/* ============================ SEGUIMIENTO SIAU (módulo solo para administradores) ============================
+   Es la plataforma de evidencias del SIAU y la Asociación de Usuarios: otro proyecto, en OTRA cuenta de Google, con su propia hoja, su carpeta
+   de fotos y sus accesos. Esta plataforma es el puente: el servidor consulta el resumen con una cuenta «Consulta» (el administrador no abre una
+   segunda sesión) y los botones abren la plataforma en otra pestaña. Solo lo ve el administrador; el servidor lo exige en cada llamada. */
+function cargarSeguimiento(){
+  $("segCuerpo").innerHTML = esqueleto(2);
+  srv("apiSeguimiento").then(function(r){ pintarSeguimiento(r); pedirResumenSeguimiento(false); })
+    .catch(function(e){ $("segCuerpo").innerHTML = ""; aviso("segAviso", msgErr(e), "err"); });
+}
+function pedirResumenSeguimiento(forzar){
+  var caja = $("segResumen"); if(!caja) return;
+  caja.innerHTML = '<div class="sk" style="height:96px"></div>';
+  srvSilencioso("apiSeguimientoResumen", !!forzar).then(function(r){ pintarResumenSeguimiento(r); })
+    .catch(function(e){ caja.innerHTML = '<div class="aviso err">'+ic("alerta","s")+'<div>'+msgErr(e)+'</div></div>'; });
+}
+function pintarResumenSeguimiento(r){
+  var caja = $("segResumen"); if(!caja) return;
+  if(!r || r.ok === false){ caja.innerHTML = '<div class="aviso err">'+ic("alerta","s")+'<div>'+esc((r && r.mensaje) || "No se pudo leer el resumen.")+'</div></div>'; return; }
+  if(!r.conectado){
+    caja.innerHTML = r.motivo === "sin_credenciales"
+      ? '<div class="aviso info">'+ic("alerta","s")+'<div>Conecta el puente para ver aquí el resumen del mes: en la plataforma de evidencias crea un acceso con rol <b>Consulta</b> y pega su usuario y contraseña en «Conexión», más abajo.</div></div>'
+      : '<div class="aviso err">'+ic("alerta","s")+'<div><b>Sin conexión con la plataforma de evidencias.</b> '+esc(r.mensaje||"")+'</div></div>';
+    return;
+  }
+  var x = r.resumen, e = x.estados || {}, pct = function(a,b){ return b ? Math.round(100*a/b)+" %" : "—"; };
+  var k = function(et, n, pie){ return '<div class="kmini"><span class="et">'+et+'</span><span class="n">'+n+'</span><span class="pie">'+pie+'</span></div>'; };
+  caja.innerHTML = '<div class="card-tit" style="margin-bottom:10px"><h3>'+ic("pulso")+'Resumen de '+esc(x.mes)+'</h3><span class="chip v">Conectado</span></div>'+
+    '<div class="seg-kpis">'+
+      k("SIAU que cumplen", (e.cumple||0)+'<small> de '+x.evaluados+'</small>', (e.camino||0)+' en camino · '+(e.atencion||0)+' requieren atención')+
+      k("Encuestas", x.encuestas.valor, x.encuestas.meta ? pct(x.encuestas.valor, x.encuestas.meta)+' de la meta ('+x.encuestas.meta+')' : "Sin meta")+
+      k("Charlas", x.charlas.valor, x.charlas.meta ? pct(x.charlas.valor, x.charlas.meta)+' de la meta ('+x.charlas.meta+')' : "Sin meta")+
+      k("Evidencias del mes", (x.evidencias&&x.evidencias.total)||0, x.actas ? 'Actas de buzón '+x.actas.entregadas+' de '+x.actas.esperadas : "Fotos y documentos cargados")+
+    '</div>'+(r.desdeCache ? '' : '');
+}
+function pintarSeguimiento(r){
+  if(!r || r.ok === false){ $("segCuerpo").innerHTML = ""; aviso("segAviso", esc((r && r.mensaje) || "No se pudo cargar el enlace."), "err"); return; }
+  var bloque = function(titulo, lista, boton, url, primario){
+    return '<div class="card seg-card"><h3 class="seg-tit">'+titulo+'</h3><ul class="seg-lista">'+lista.map(function(x){ return '<li>'+x+'</li>'; }).join("")+'</ul>'+
+      '<a class="b '+(primario?'pri':'sec')+'" href="'+esc(url)+'" target="_blank" rel="noopener noreferrer">'+ic("externo","s")+boton+'</a></div>';
+  };
+  $("segCuerpo").innerHTML =
+    '<div class="card seg-resumen anim"><div id="segResumen"></div>'+
+      '<div class="acciones"><button class="b sec" id="btnSegActualizar" type="button">'+ic("actualizar","s")+'Actualizar resumen</button></div></div>'+
+    '<div class="seg-par anim">'+
+      bloque("Visor", ["Tablero con indicadores y tendencias de 12 meses","Cumplimiento de cada SIAU en las 40 sedes","Consultas por mes, sede o frase y reportes descargables","Fototeca de fotografías y documentos"], "Abrir el visor", r.visor, true)+
+      bloque("Administrador", ["Cargar evidencias con fotos","Personal, sedes por SIAU, vacaciones y licencias","Metas, nombres de sede y actualización de consolidados","Accesos con usuario y contraseña"], "Abrir el administrador", r.admin, false)+
+    '</div>'+
+    '<div class="card seg-conf anim"><div class="card-tit"><h3>Conexión</h3><span class="d">'+(r.personalizado ? "Dirección personalizada" : "Dirección predeterminada")+'</span></div>'+
+      '<p class="sub" style="margin:0">La plataforma de evidencias corre en otra cuenta de Google. Esta plataforma la consulta desde el servidor con una cuenta de solo lectura, así no hay choques de sesión en el navegador.</p>'+
+      '<label for="segUrl">Dirección de la aplicación web (termina en /exec)</label><input id="segUrl" value="'+esc(r.visor)+'" spellcheck="false" autocomplete="off">'+
+      '<div class="seg-cred"><div><label for="segUsuario">Usuario del puente (rol Consulta)</label><input id="segUsuario" value="'+esc(r.usuario||"")+'" placeholder="p. ej. puente.pqrs" autocomplete="off" spellcheck="false"></div>'+
+      '<div><label for="segClave">Contraseña</label><input id="segClave" type="password" placeholder="'+(r.claveGuardada ? "Guardada: déjala vacía para conservarla" : "Pégala aquí")+'" autocomplete="new-password"></div></div>'+
+      '<div class="acciones"><button class="b pri" id="btnSegGuardar" type="button">'+ic("check","s")+'Guardar conexión</button>'+
+      '<button class="b sec" id="btnSegProbar" type="button">'+ic("pulso","s")+'Probar conexión</button>'+
+      '<button class="b sec" id="btnSegRestablecer" type="button">'+ic("actualizar","s")+'Dirección predeterminada</button></div>'+
+      '<p class="hint" style="margin:0">En la plataforma de evidencias: Administrar ▸ Accesos ▸ crea el acceso «Consulta». La contraseña se guarda solo en esta plataforma y no vuelve a mostrarse.</p></div>';
+  var guardar = function(datos, btn, probar){
+    var fin = ocupado(btn, probar ? "Probando…" : "Guardando…");
+    srv("apiGuardarSeguimiento", datos).then(function(x){
+      if(!x.ok){ fin(); aviso("segAviso", esc(x.mensaje), "err"); return null; }
+      return probar ? srv("apiProbarSeguimiento") : x;
+    }).then(function(x){
+      fin(); if(!x) return;
+      aviso("segAviso", esc(probar ? x.mensaje : "Conexión guardada."), (probar && !x.conectado) ? "err" : "ok");
+      pintarSeguimiento(x.visor ? x : x); pintarResumenSeguimiento(x.resumen !== undefined || x.conectado !== undefined ? x : { ok:true, conectado:false, motivo:"sin_credenciales" });
+      if(!probar) pedirResumenSeguimiento(true);
+    }).catch(function(e){ fin(); aviso("segAviso", msgErr(e), "err"); });
+  };
+  var datos = function(){ var d = { url: $("segUrl").value, usuario: $("segUsuario").value }; if($("segClave").value) d.clave = $("segClave").value; return d; };
+  $("btnSegGuardar").onclick = function(){ guardar(datos(), "btnSegGuardar", false); };
+  $("btnSegProbar").onclick = function(){ guardar(datos(), "btnSegProbar", true); };
+  $("btnSegRestablecer").onclick = function(){ guardar({ url: "" }, "btnSegRestablecer", false); };
+  $("btnSegActualizar").onclick = function(){ pedirResumenSeguimiento(true); };
+}
 function cargarUsuarios(){
   $("usrLista").innerHTML = esqueleto(3);
   srv("apiUsuarios").then(function(r){ if(!r.ok){ aviso("usrAviso", esc(r.mensaje), "err"); return; } APP.usr = r; pintarUsuarios(); cargarAuditoria(); })

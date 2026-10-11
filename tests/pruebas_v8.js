@@ -572,7 +572,7 @@ const libTP = G.__exportaciones[G.__exportaciones.length - 1];
 assert(libTP.hojas.Panel && libTP.hojas.Panel.graficos.length === 5 && !libTP.hojas.Consolidado, "el técnico recibe el mismo panel con gráficos, sin el consolidado");
 assert(/no incluyen datos de las personas/.test(libTP.hojas.Panel.celda(64, 2)) && /C\. LA PLAYA/.test(libTP.hojas.Panel.celda(6, 2)), "el panel del técnico aclara que no hay datos personales y muestra sus sedes");
 G.SESION = null;
-assert(G.estadoAcceso().version === G.VERSION_CODIGO && /^9\.7/.test(G.estadoAcceso().version), "estadoAcceso informa la versión del servidor para el ingreso");
+assert(G.estadoAcceso().version === G.VERSION_CODIGO && /^9\.8/.test(G.estadoAcceso().version), "estadoAcceso informa la versión del servidor para el ingreso");
 (function () {
   var xml = '<?xml version="1.0"?><c:chartSpace xmlns:c="x"><c:chart><c:plotArea><c:barChart><c:ser><c:idx val="0"/><c:dLbls><c:showVal val="0"/></c:dLbls><c:cat></c:cat><c:val></c:val></c:ser><c:ser><c:idx val="1"/><c:cat></c:cat><c:val></c:val></c:ser><c:gapWidth val="5"/></c:barChart></c:plotArea></c:chart></c:chartSpace>';
   var r = G._xlEtiquetasXml_(xml);
@@ -603,3 +603,44 @@ assert(G._categoriaTexto_("Pregunta", "buenos dias, quiero saber el horario") ==
 // una EPS que escribe desde su dominio no recibe acuse aunque se radique por otro canal
 { const fx = cons.d.length; const r = G.apiRadicar_({ descripcion: "Reclamo remitido por EPS.", fechaRecepcion: "2026-09-23", fechaRadicacion: "2026-09-23", tipoPqrs: "RECLAMO", sede: "C. LA PLAYA", correo: "jefe@sura.com.co" });
   const ac = G._acuseRecepcion_(fila(r.codigo)); assert(/no aplica/.test(ac), "un correo de dominio de EPS se trata como institucional en cualquier canal: " + ac); }
+
+console.log("---- v9.8: Seguimiento SIAU solo para administradores ----");
+assert(G.RUTAS.apiSeguimiento[1] === "admin" && G.RUTAS.apiGuardarSeguimiento[1] === "admin", "el enlace de Seguimiento SIAU y su configuración son solo del administrador");
+G.SESION = null;
+const seg0 = G.apiSeguimiento_();
+assert(seg0.ok && /^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(seg0.visor) && seg0.admin === seg0.visor + "?pagina=admin" && !seg0.personalizado, "el administrador recibe el enlace del visor y del administrador");
+assert(G.apiGuardarSeguimiento_("https://ejemplo.com/exec").ok === false && G.apiGuardarSeguimiento_("http://script.google.com/macros/s/AKfycbAAAAAAAAAAAAAAAAAAAAAA/exec").ok === false && G.apiGuardarSeguimiento_("https://script.google.com/macros/s/AKfycbAAAAAAAAAAAAAAAAAAAAAA/dev").ok === false, "solo se aceptan direcciones /exec de Apps Script");
+const seg1 = G.apiGuardarSeguimiento_("https://script.google.com/macros/s/AKfycbAAAAAAAAAAAAAAAAAAAAAA/exec");
+assert(seg1.ok && seg1.personalizado && /AKfycbAAAAAAAAAAAAAAAAAAAAAA/.test(seg1.visor), "se puede cambiar la dirección");
+assert(G.apiGuardarSeguimiento_("").personalizado === false, "se puede volver a la predeterminada");
+assert(G._permitido_({ rol: "Técnico" }, "admin") === false && G._permitido_({ rol: "Consulta" }, "admin") === false && G._permitido_({ rol: "Administrador" }, "admin") === true, "técnico y consulta no pasan el permiso de administración");
+
+console.log("---- v9.8: puente servidor a servidor con la plataforma de evidencias (otra cuenta) ----");
+G.apiGuardarSeguimiento_(""); G.UrlFetchApp.llamadas.length = 0; G.UrlFetchApp.seg = null;
+assert(G.apiSeguimientoResumen_().conectado === false && G.apiSeguimientoResumen_().motivo === "sin_credenciales" && !G.UrlFetchApp.llamadas.some(l => l.seguimiento), "sin credenciales no se hace ninguna llamada");
+assert(G.apiGuardarSeguimiento_({ usuario: "mal usuario!", clave: "ClaveDePrueba123" }).ok === false && G.apiGuardarSeguimiento_({ usuario: "puente.pqrs", clave: "corta" }).ok === false, "el usuario y la contraseña del puente se validan");
+const gs = G.apiGuardarSeguimiento_({ usuario: "puente.pqrs", clave: "ClaveDePrueba123" });
+assert(gs.ok && gs.usuario === "puente.pqrs" && gs.claveGuardada === true && !JSON.stringify(gs).includes("ClaveDePrueba123"), "se guardan las credenciales sin devolver la contraseña");
+const r1 = G.apiSeguimientoResumen_();
+assert(r1.conectado && r1.resumen.siau === 15 && r1.resumen.estados.cumple === 6 && r1.resumen.encuestas.meta === 1260 && /^\d{4}-\d{2}$/.test(r1.resumen.mes), "el resumen del mes llega por el puente");
+assert(!JSON.stringify(r1).includes("NOMBRE QUE NO DEBE PASAR") && !JSON.stringify(r1).includes("ClaveDePrueba123"), "el resumen solo lleva conteos: sin nombres de personas ni contraseña");
+const llam = () => G.UrlFetchApp.llamadas.filter(l => l.seguimiento);
+assert(llam().length === 2 && llam()[0].json.ruta === "/api/login" && llam()[1].json.ruta === "/api/panel" && llam().every(l => l.metodo === "post"), "una sesión y una lectura, siempre por POST de servidor a servidor");
+G.apiSeguimientoResumen_();
+assert(llam().length === 2, "el resumen se guarda 5 minutos: la segunda visita no consulta");
+G.apiSeguimientoResumen_(true);
+assert(llam().length === 3 && llam().filter(l => l.json.ruta === "/api/login").length === 1, "al actualizar se reutiliza la sesión de la otra plataforma (no vuelve a iniciar sesión)");
+G.UrlFetchApp.seg.sesiones = {};   // la sesión de allá venció
+assert(G.apiSeguimientoResumen_(true).conectado === true && llam().filter(l => l.json.ruta === "/api/login").length === 2, "si la sesión venció, inicia otra sola");
+G.apiGuardarSeguimiento_({ clave: "OtraClave12345" });
+const mal = G.apiProbarSeguimiento_();
+assert(mal.conectado === false && /Usuario o contraseña incorrectos/.test(mal.mensaje) && !/OtraClave12345|ClaveDePrueba123/.test(JSON.stringify(mal)), "con una contraseña equivocada avisa sin repetirla");
+G.apiGuardarSeguimiento_({ clave: "ClaveDePrueba123" });
+G.UrlFetchApp.seg.falla = true;
+assert(/Cualquier persona/.test(G.apiProbarSeguimiento_().mensaje), "si la otra plataforma no responde datos, explica cómo corregir su implementación");
+G.UrlFetchApp.seg.falla = false;
+assert(G.apiProbarSeguimiento_().conectado === true, "al volver a responder, reconecta");
+assert(!JSON.stringify(traza.d).includes("ClaveDePrueba123") && !JSON.stringify(traza.d).includes("OtraClave12345"), "la trazabilidad no guarda contraseñas del puente");
+assert(G.RUTAS.apiSeguimientoResumen[1] === "admin" && G.RUTAS.apiProbarSeguimiento[1] === "admin", "el resumen y la prueba del puente son solo del administrador");
+G.apiGuardarSeguimiento_({ usuario: "" });
+assert(G.apiSeguimiento_().claveGuardada === false, "quitar el usuario borra también la contraseña");

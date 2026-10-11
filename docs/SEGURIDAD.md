@@ -95,3 +95,10 @@ Ajustes que solo puede hacer el dueño del repositorio, en **Settings** (una vez
 3. **Pages ▸** activar **Enforce HTTPS**.
 4. **Cuenta de GitHub:** verificación en dos pasos y llave de acceso o app autenticadora.
 5. Nadie más con permiso de escritura (*Settings ▸ Collaborators*).
+
+## Puente con la plataforma de evidencias (v9.8)
+- **Solo administradores.** `apiSeguimiento`, `apiGuardarSeguimiento`, `apiSeguimientoResumen` y `apiProbarSeguimiento` son `P_ADMIN`; el botón del menú también se oculta, pero la protección real es la del servidor.
+- **Otra cuenta, sin sesiones compartidas.** La consulta sale del servidor de PQRS (`UrlFetchApp`) hacia la implementación de la plataforma de evidencias con un acceso de rol «Consulta». Ninguna cookie ni sesión de Google se comparte y el navegador no inicia sesión en la otra cuenta.
+- **Mínimo privilegio.** El `doPost` de la otra plataforma solo admite inicio y cierre de sesión, `/api/sesion`, `/api/panel` y `/api/cumplimiento`; el resto responde 403. De ahí PQRS solo conserva conteos agregados (sin nombres).
+- **Credenciales.** Usuario y contraseña del puente van en propiedades del script; la contraseña no se devuelve a la pantalla, no se escribe en la trazabilidad ni en los mensajes de error. Se rota creando otro acceso en esa plataforma y guardándolo aquí.
+- Pruebas: `tests/pruebas_v8.js` (sección «puente servidor a servidor») y `test/google.test.mjs` del otro repositorio.

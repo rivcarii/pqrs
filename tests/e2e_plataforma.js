@@ -47,6 +47,20 @@ require("fs").mkdirSync(CAP, { recursive: true });
       if (a1.uBottom > a1.alto || a2.uTop !== a1.uTop || a2.kTop !== a1.kTop) errores.push(w + " la cuenta o el logo se mueven con el menú: " + JSON.stringify([a1, a2]));
       await p.setViewportSize({ width: w, height: 900 }); await p.waitForTimeout(200);
     }
+    // v9.8 · Seguimiento SIAU: solo administradores; abre la plataforma de evidencias en otra pestaña
+    {
+      const irS = async () => { if (w <= 1000) { await p.click("#btnMenu"); await p.waitForTimeout(300); } await p.click('#menu button[data-v="seguimiento"]'); await p.waitForTimeout(500); };
+      await irS(); await p.waitForSelector("#segCuerpo .seg-card", { timeout: 8000 }).catch(() => errores.push(w + " el módulo Seguimiento SIAU no se pinta"));
+      const enl = await p.$$eval("#segCuerpo .seg-card a.b", els => els.map(e => ({ h: e.getAttribute("href"), t: e.target, r: e.rel })));
+      if (enl.length !== 2 || !/^https:\/\/script\.google\.com\/macros\/s\/[^/]+\/exec$/.test(enl[0].h) || !/\?pagina=admin$/.test(enl[1].h) || enl.some(x => x.t !== "_blank" || !/noopener/.test(x.r)))
+        errores.push(w + " los enlaces de Seguimiento SIAU no son los esperados: " + JSON.stringify(enl));
+      await p.waitForSelector("#segResumen .aviso", { timeout: 6000 }).catch(() => errores.push(w + " Seguimiento SIAU no explica cómo conectar el puente"));
+      if (!/Conecta el puente/.test(await p.textContent("#segResumen").catch(() => ""))) errores.push(w + " sin el aviso de conexión pendiente del puente");
+      await desb("seguimiento"); if (w === 1366 || w === 390) await p.screenshot({ path: CAP + `z_${w}_seguimiento.png`, fullPage: true });
+      await p.fill("#segUrl", "https://ejemplo.com/exec"); await p.click("#btnSegGuardar");
+      await p.waitForSelector("#segAviso .aviso.err", { timeout: 5000 }).catch(() => errores.push(w + " Seguimiento SIAU acepta una dirección que no es de Apps Script"));
+      await p.evaluate(() => ver("inicio"));
+    }
     // v9.3 · Riverino: botón, búsqueda, «Llévame», recorrido de bienvenida y consejos de primera vez
     await p.waitForSelector("#riverino", { timeout: 6000 }).catch(() => errores.push(w + " no aparece el botón de Riverino"));
     await p.click("#riverino"); await p.waitForSelector("#rvPanel", { timeout: 4000 }).catch(() => errores.push(w + " Riverino no abre su panel"));
@@ -180,7 +194,9 @@ require("fs").mkdirSync(CAP, { recursive: true });
     if ((await p.textContent("#detalleCuerpo")).trim()) errores.push(w + " quedaron datos del usuario anterior");
     await entrar("tecnico.playa");
     const visibles = await p.$$eval('#menu button[data-v]', els => els.filter(e => !e.hidden).map(e => e.dataset.v));
-    if (visibles.includes("usuarios") || visibles.includes("correo")) errores.push(w + " técnico ve módulos de administración: " + visibles);
+    if (visibles.includes("usuarios") || visibles.includes("correo") || visibles.includes("seguimiento")) errores.push(w + " técnico ve módulos de administración: " + visibles);
+    { const rr = await p.evaluate(() => srv("apiSeguimiento").then(r => JSON.stringify(r), e => "rechazado"));
+      if (/script\.google\.com/.test(rr)) errores.push(w + " el técnico pudo pedir el enlace de Seguimiento SIAU por la API: " + rr); }
     await desb("inicio técnico"); if (w === 1366 || w === 390) await p.screenshot({ path: CAP + `z_${w}_inicio_tecnico.png`, fullPage: true });
     // v8.7.3 · el técnico descarga solo indicadores (sin datos de casos); el consolidado completo es del administrador
     await irA("tablero"); await p.waitForSelector("#gMesTipo", { timeout: 8000 });
