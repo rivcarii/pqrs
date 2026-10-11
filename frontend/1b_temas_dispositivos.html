@@ -277,3 +277,21 @@ html{scroll-behavior:smooth}
 @media(max-width:700px){#splash .sp-sistema{--d:120px}}
 @media(prefers-reduced-motion:reduce){html::after{animation:none}#splash .sp-medalla{animation:none}}
 </style>
+<style>
+/* v9.6 · Ingreso y pantalla de inicio en 2D: planetas planos, anillos finos y la medalla dorada sola (sin disco blanco).
+   Movimiento con propósito: la medalla y las órbitas entran una vez (ease-out, <1 s), las letras giran despacio y un anillo suave marca el centro. */
+.orb i,.solar b::after{background-image:none!important;box-shadow:none!important}
+.orb{border:1px solid rgba(255,255,255,.15)}
+#medallaHero{width:auto;height:calc(var(--hero-h) * .46);padding:0;border-radius:0;background:none;box-shadow:none;filter:none;
+  animation:medallaEntra .7s cubic-bezier(.23,1,.32,1) both}
+.orbita{animation:orbitaEntra .9s cubic-bezier(.23,1,.32,1) .12s both}
+.hero-caja::before{content:"";position:absolute;left:50%;top:50%;width:calc(var(--hero-h) * .4);height:calc(var(--hero-h) * .4);margin:calc(var(--hero-h) * -.2) 0 0 calc(var(--hero-h) * -.2);
+  border-radius:50%;border:1px solid rgba(254,220,0,.5);pointer-events:none;animation:ecoMedalla 3.6s cubic-bezier(.23,1,.32,1) 1s infinite}
+@keyframes medallaEntra{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:none}}
+@keyframes orbitaEntra{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:none}}
+@keyframes ecoMedalla{0%{opacity:.55;transform:scale(1)}70%,100%{opacity:0;transform:scale(1.7)}}
+#splash .sp-medalla{inset:22%;border-radius:0;overflow:visible;background:none;box-shadow:none;animation:medallaEntra .6s cubic-bezier(.23,1,.32,1) both}
+#splash .sp-medalla img{padding:0}
+.solar .nucleo{background:var(--teal);box-shadow:none}
+@media(prefers-reduced-motion:reduce){#medallaHero,.orbita,#splash .sp-medalla{animation:none}.hero-caja::before{display:none}}
+</style>

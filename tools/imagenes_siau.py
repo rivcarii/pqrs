@@ -26,7 +26,8 @@ web = {
     "IMG_SIAU_B": png_b64("Logo_SIAU_blanco_medalla_dorada.png", 640, 160),
     "IMG_SIAU_FICHA": png_b64("Logo_SIAU_azul_medalla_dorada.png", 1100, 192),
     "IMG_SIAU_MEDALLA": png_b64("Medalla_SIAU_dorada.png", 240, 128),
-    "IMG_MEDALLA_AZUL": png_b64("Medalla_SIAU_azul.png", 360, 64),   # medalla azul: avatar de Riverino, pantalla de inicio y centro del ingreso
+    "IMG_MEDALLA_AZUL": png_b64("Medalla_SIAU_azul.png", 360, 64),
+    "IMG_MEDALLA_DORADA": png_b64("Medalla_SIAU_dorada.png", 420, 128),   # medalla sobre fondos oscuros (ingreso y pantalla de inicio), sin disco ni fondo   # medalla azul: avatar de Riverino, pantalla de inicio y centro del ingreso
 }
 js = "/* Generado por tools/imagenes_siau.py a partir de assets/siau — no editar a mano. */\n" + "".join(
     'var %s = "data:image/png;base64,%s";\n' % (k, v) for k, v in web.items())

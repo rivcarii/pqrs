@@ -18,6 +18,11 @@ require("fs").mkdirSync(CAP, { recursive: true });
     if (w >= 1001) {
       const m = await p.evaluate(() => { const i = document.getElementById("medallaHero"), r = i.getBoundingClientRect(); return { nat: i.naturalWidth / i.naturalHeight, vis: r.width / r.height, orb: document.querySelectorAll(".orb").length, anim: getComputedStyle(document.querySelector(".orb.o1")).animationName }; });
       if (Math.abs(m.nat - m.vis) > 0.02) errores.push(w + " la medalla del ingreso se deforma: natural " + m.nat + " vs visible " + m.vis);
+      const fl = await p.evaluate(() => { const i = document.getElementById("medallaHero"), c = getComputedStyle(i), o = getComputedStyle(document.querySelector(".orb i"));
+        return { bg: c.backgroundColor, radio: c.borderRadius, sombra: c.boxShadow, brillo: o.backgroundImage, pill: !!document.querySelector(".hero-pill"), leyenda: !!document.querySelector(".hero-leyenda") }; });
+      if (fl.bg !== "rgba(0, 0, 0, 0)" || fl.sombra !== "none") errores.push(w + " la medalla del ingreso tiene fondo o sombra: " + JSON.stringify(fl));
+      if (fl.brillo !== "none") errores.push(w + " los planetas no son planos (2D): " + fl.brillo);
+      if (fl.pill || fl.leyenda) errores.push(w + " siguen el rótulo «La mejora comienza contigo» o la leyenda de tipos");
       if (m.orb !== 4 || m.anim !== "orbitar") errores.push(w + " las órbitas P-Q-R-S no están animadas");
     }
     // v9.3 · el ingreso cabe en una pantalla: sin desplazarse en escritorio y con el botón visible en celular y tableta

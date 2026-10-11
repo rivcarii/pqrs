@@ -1188,11 +1188,8 @@ table.tb tr[data-cod]:hover td{background:var(--teal-wash-2)}
 .orb.o4 i{background:#1F6FD1}
 @keyframes orbitar{from{transform:translate(-50%,-50%) rotate(0)}to{transform:translate(-50%,-50%) rotate(360deg)}}
 @keyframes contra{from{transform:rotate(0)}to{transform:rotate(-360deg)}}
-/* La medalla azul del SIAU, sobre un disco blanco, es el centro de las órbitas */
+/* La medalla dorada del SIAU, sola y plana, es el centro de las órbitas */
 #medallaHero{position:relative;z-index:2;height:calc(var(--hero-h) * .5);width:calc(var(--hero-h) * .5);max-width:none;object-fit:contain;padding:calc(var(--hero-h) * .04);border-radius:50%;background:#fff;box-shadow:0 18px 36px rgba(0,20,30,.40),0 0 0 calc(var(--hero-h) * .02) rgba(255,255,255,.22)}
-.hero-pill{position:absolute;left:-4%;bottom:5%;transform:rotate(-3deg);background:#FEDC00;color:#2E2500;border-radius:14px;padding:8px 14px;
-  font-weight:900;font-size:clamp(12px,1.9vh,15px);line-height:1.2;font-family:var(--display);box-shadow:0 10px 22px rgba(0,20,30,.30);white-space:nowrap}
-.hero-leyenda{flex:none;margin-top:6px;font-weight:500;font-size:12.5px;line-height:1.3;font-family:var(--sans);letter-spacing:.04em;color:rgba(255,255,255,.62);text-align:center}
 /* Barra lateral: se desplaza si la pantalla es baja, pero sin mostrar la barra de desplazamiento */
 .lateral,#menu{scrollbar-width:none;-ms-overflow-style:none}
 .lateral::-webkit-scrollbar,#menu::-webkit-scrollbar{display:none;width:0;height:0}
@@ -1328,7 +1325,7 @@ table.tb tr[data-cod]:hover td{background:var(--teal-wash-2)}
 <!-- VENDOR qrcode-generator -->
 <!-- VENDOR imagenes_marca -->
 <!-- VENDOR imagenes_siau -->
-<script>document.addEventListener("DOMContentLoaded", function(){ var m = document.getElementById("medallaHero"); if(m && window.IMG_MEDALLA_AZUL) m.src = window.IMG_MEDALLA_AZUL; });</script>
+<script>document.addEventListener("DOMContentLoaded", function(){ var m = document.getElementById("medallaHero"); if(m && window.IMG_MEDALLA_DORADA) m.src = window.IMG_MEDALLA_DORADA; });</script>
 <script>
 /* v9 · marca: MiRed primero, Gestión de la Calidad después; blanco sobre fondo oscuro, color sobre fondo claro */
 document.addEventListener("DOMContentLoaded", function(){
