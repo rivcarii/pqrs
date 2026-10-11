@@ -405,7 +405,7 @@ function baseOpciones(extra){
 function horizontal(){
   return baseOpciones({ indexAxis:"y", scales:{
     x:{grid:{color:PAL.linea,drawTicks:false},border:{display:false},beginAtZero:true,ticks:{color:PAL.tinta3,font:{family:FUENTE,size:11},precision:0}},
-    y:{grid:{display:false},border:{display:false},ticks:{color:PAL.tinta,font:{family:FUENTE,size:11.5}}} } });
+    y:{grid:{display:false},border:{display:false},ticks:{color:PAL.tinta,font:{family:FUENTE,size:11.5},callback:function(v){ var l = String(this.getLabelForValue(v)); return l.length > 19 ? l.slice(0,18)+"…" : l; }}} } });
 }
 function leyenda(){ return { display:true, position:"top", align:"end", labels:{ boxWidth:9, boxHeight:9, usePointStyle:true, pointStyle:"rectRounded",
   color:PAL.tinta, font:{family:FUENTE,size:11.5}, padding:12 } }; }

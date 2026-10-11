@@ -3962,6 +3962,75 @@ html{scroll-behavior:smooth}
 .solar .nucleo{background:var(--teal);box-shadow:none}
 @media(prefers-reduced-motion:reduce){#medallaHero,.orbita,#splash .sp-medalla{animation:none}.hero-caja::before{display:none}}
 </style>
+<style>
+/* ===========================================================================
+   v9.7 · ALINEACIÓN Y PROPORCIONES
+   Reglas: (1) todo botón centra su contenido y comparte alturas; (2) las tarjetas que comparten fila miden lo mismo y su contenido
+   se reparte, sin vacíos; (3) pestañas y filtros llenan su fila en lugar de dejar huecos; (4) el pie de cada tarjeta va abajo.
+   =========================================================================== */
+/* 1 · Botones */
+.b,button.b,a.b{display:inline-flex;align-items:center;justify-content:center;gap:8px;text-align:center;line-height:1.2;min-height:40px}
+.b.mini,button.b.mini,a.b.mini{min-height:32px}
+.b .ic,button.b .ic{flex:none}
+.acciones{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;align-items:stretch}
+.acciones .b{width:100%;white-space:normal}
+.acciones .b.fant{border:1px solid var(--line-2)}
+.top-der .b,.card-tit .b{min-height:34px}
+
+/* 2 · Inicio: la fila del saludo y las filas de tarjetas */
+.hero{align-items:stretch}
+.hero-kpis{grid-auto-rows:1fr}
+.kmini{justify-content:space-between;padding:18px 16px}
+.inicio-cols{align-items:stretch}
+.inicio-cols>.card,.pila>.card{display:flex;flex-direction:column}
+.pila{display:flex;flex-direction:column}
+.pila>.card{flex:1 1 auto}
+.inicio-cols>.card>.sedes-dist{flex:1;align-content:space-between}
+.inicio-cols>.card>.scroll-x{flex:1;display:flex}
+.inicio-cols>.card>.scroll-x>table{height:100%;width:100%}
+.tb.urg{table-layout:auto}
+.tb.urg th,.tb.urg td{padding-left:6px;padding-right:6px;font-size:12.5px}
+.tb.urg td.dos-l{max-width:150px}
+.tb.urg th:last-child,.tb.urg td:last-child{text-align:right;padding-right:10px;white-space:nowrap}
+
+/* 3 · Prioritarias: tarjetas del mismo alto con el pie abajo */
+.prio-lista{grid-auto-rows:1fr;align-items:stretch}
+.pr-card{height:100%}
+.pr-card .pr-pie{margin-top:auto}
+
+/* 4 · Pestañas y filtros llenan su fila y quedan centrados */
+#etapas{width:100%;gap:4px}
+#etapas button{flex:1 1 auto;display:inline-flex;align-items:center;justify-content:center;text-align:center;white-space:nowrap}
+.seg{display:flex;flex-wrap:wrap;gap:8px}
+.seg button{flex:1 1 150px;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:40px;text-align:center}
+@media(min-width:1200px){
+  .filtros{grid-template-columns:minmax(0,2.2fr) repeat(5,minmax(0,1fr)) auto}
+  .filtros .b{min-height:40px}
+}
+.filtros .b{align-self:end}
+/* 5 · Tablas, bloque de Excel, pestañas del correo y directorio */
+table.tb td{white-space:normal}
+table.tb td.mono,table.tb td.num,table.tb td:has(.chip),table.tb td:has(.tag){white-space:nowrap}
+table.tb td.dos-l{min-width:120px}
+.bloque-excel{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;grid-column:1/-1}
+.bloque-excel .b{width:100%}
+.seg{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:8px}
+.seg button{flex:none;white-space:nowrap}
+.resp-reglas{align-items:end}
+#audBuscar{min-width:min(340px,100%)}
+/* 6 · Configuración: interruptores en dos columnas, acciones iguales y tablas con columnas más holgadas */
+.grid:has(>.interruptor){grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 28px}
+.grid>.interruptor{display:flex;align-items:center;min-height:36px}
+.acciones>.hint,.acciones>.chip,.acciones>span{grid-column:1/-1;text-align:center}
+.cfg-fila.cfg-ent{grid-template-columns:132px minmax(0,1.2fr) minmax(0,1.3fr) 138px 82px 160px 72px}
+.acciones:has(#btnGuardarAjustes){grid-template-columns:repeat(3,minmax(0,1fr))}
+.cfg-fila.cfg-cat{grid-template-columns:minmax(0,1.3fr) minmax(0,1.6fr) 90px 56px 100px 56px 110px 110px 72px}
+.cfg-fila .b{width:100%;justify-content:center}
+@media(max-width:600px){.seg{grid-template-columns:repeat(2,minmax(0,1fr))}.seg button{white-space:normal;padding:8px 10px;font-size:12px;line-height:1.2}}
+@media(max-width:1100px){.grid:has(>.interruptor){grid-template-columns:minmax(0,1fr)}}
+</style>
+
+
 <body>
 <div id="carga"></div>
 <div id="cargaPill" role="status" aria-live="polite"><span class="solar s"><span class="nucleo"></span><b></b><b></b></span><span id="cargaTexto">Cargando…</span></div>
@@ -4157,7 +4226,7 @@ html{scroll-behavior:smooth}
     </div>
     <div class="filtros">
       <div class="buscar"><label for="fTexto">Buscar</label><svg class="ic s"><use href="#i-buscar"/></svg>
-        <input id="fTexto" placeholder="Radicado, nombre, documento, sede… (Enter)"></div>
+        <input id="fTexto" placeholder="Radicado, nombre o documento"></div>
       <div><label for="fEstado">Estado</label><select id="fEstado"><option value="">Todos</option></select></div>
       <div><label for="fSemaforo">Semáforo</label><select id="fSemaforo">
         <option value="">Todos</option><option value="🔴">Vencidas</option>
@@ -4253,7 +4322,7 @@ html{scroll-behavior:smooth}
             <div><label class="req" for="r_tipoPqrs">Tipo de PQRS</label><select id="r_tipoPqrs"></select></div>
             <div><label for="r_entidad">Entidad presentada</label><select id="r_entidad"></select>
               <div class="hint">Define el término: sede 15 días hábiles, entes de control 24 y 72 horas.</div></div>
-            <div><label for="r_tipologia">Motivo específico (derecho vulnerado)</label><select id="r_tipologia"></select></div>
+            <div><label for="r_tipologia">Motivo específico</label><select id="r_tipologia"></select></div>
             <div class="full"><label class="req" for="r_descripcion">Descripción</label>
               <textarea id="r_descripcion" placeholder="Transcribe literalmente lo que manifiesta el usuario…"></textarea><div id="sugTipo"></div></div>
             <div class="full"><label for="r_observaciones">Observaciones internas</label><input id="r_observaciones"></div>
@@ -5985,7 +6054,7 @@ function baseOpciones(extra){
 function horizontal(){
   return baseOpciones({ indexAxis:"y", scales:{
     x:{grid:{color:PAL.linea,drawTicks:false},border:{display:false},beginAtZero:true,ticks:{color:PAL.tinta3,font:{family:FUENTE,size:11},precision:0}},
-    y:{grid:{display:false},border:{display:false},ticks:{color:PAL.tinta,font:{family:FUENTE,size:11.5}}} } });
+    y:{grid:{display:false},border:{display:false},ticks:{color:PAL.tinta,font:{family:FUENTE,size:11.5},callback:function(v){ var l = String(this.getLabelForValue(v)); return l.length > 19 ? l.slice(0,18)+"…" : l; }}} } });
 }
 function leyenda(){ return { display:true, position:"top", align:"end", labels:{ boxWidth:9, boxHeight:9, usePointStyle:true, pointStyle:"rectRounded",
   color:PAL.tinta, font:{family:FUENTE,size:11.5}, padding:12 } }; }
@@ -6736,7 +6805,7 @@ function activarVerClave(raiz){
     b.addEventListener("click", function(){ var i=$(b.dataset.verClave); i.type = i.type==="password" ? "text" : "password"; });
   });
 }
-var FRONT_VERSION = "9.6";
+var FRONT_VERSION = "9.7";
 function pintarVersion(estado){
   var el = $("accVersion");
   if(!el){ el = document.createElement("div"); el.id = "accVersion"; el.className = "hint"; el.style.cssText = "text-align:center;margin-top:10px;font-size:12px";

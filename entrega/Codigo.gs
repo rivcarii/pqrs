@@ -2450,7 +2450,7 @@ function _terminoTexto_(termino, tipoDia, entidad) {
 // MIGRACIÓN AUTOMÁTICA (se ejecuta una sola vez al abrir la plataforma)
 // ---------------------------------------------------------------------------
 var ESQUEMA = "8.5";
-var VERSION_CODIGO = "9.6 · Ingreso en 2D";
+var VERSION_CODIGO = "9.7 · Alineación y proporciones";
 
 function repararFechasYFormulas() {   // también disponible en el menú PQRS
   SpreadsheetApp.getUi();
