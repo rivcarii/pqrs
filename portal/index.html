@@ -1196,7 +1196,11 @@ table.tb tr[data-cod]:hover td{background:var(--teal-wash-2)}
 /* Barra lateral: se desplaza si la pantalla es baja, pero sin mostrar la barra de desplazamiento */
 .lateral,#menu{scrollbar-width:none;-ms-overflow-style:none}
 .lateral::-webkit-scrollbar,#menu::-webkit-scrollbar{display:none;width:0;height:0}
-.lateral{overflow-y:auto;overflow-x:hidden}
+/* v9.5 · el logo (arriba) y la cuenta (abajo) quedan fijos; solo el menú se desplaza dentro de la barra lateral */
+.lateral{overflow:hidden}
+.lat-marca,.lat-usuario{flex:none}
+#menu{flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain}
+.lat-usuario{margin-top:0}
 /* NPS (tablero) */
 .nps{margin-top:16px}.nps h3{margin:0}.nps .sub{margin:2px 0 0;font-size:12.5px;color:var(--ink-3)}
 .nps-cab{display:flex;justify-content:space-between;align-items:flex-start;gap:14px}
@@ -6718,7 +6722,7 @@ function activarVerClave(raiz){
     b.addEventListener("click", function(){ var i=$(b.dataset.verClave); i.type = i.type==="password" ? "text" : "password"; });
   });
 }
-var FRONT_VERSION = "9.4";
+var FRONT_VERSION = "9.5";
 function pintarVersion(estado){
   var el = $("accVersion");
   if(!el){ el = document.createElement("div"); el.id = "accVersion"; el.className = "hint"; el.style.cssText = "text-align:center;margin-top:10px;font-size:12px";

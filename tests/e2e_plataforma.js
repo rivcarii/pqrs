@@ -31,6 +31,17 @@ require("fs").mkdirSync(CAP, { recursive: true });
     };
     await entrar("siau.admin");
 
+    // v9.5 · el logo y la cuenta quedan fijos en la barra lateral; solo el menú se desplaza
+    if (w >= 1001) {
+      await p.setViewportSize({ width: w, height: 520 }); await p.waitForTimeout(300);
+      const lat = async () => p.evaluate(() => { const l = document.getElementById("lateral"), m = document.getElementById("menu"), u = document.querySelector(".lat-usuario").getBoundingClientRect(), k = document.querySelector(".lat-marca").getBoundingClientRect();
+        return { lscroll: l.scrollHeight - l.clientHeight, mscroll: m.scrollHeight - m.clientHeight, uBottom: Math.round(u.bottom), uTop: Math.round(u.top), kTop: Math.round(k.top), alto: innerHeight }; });
+      const a1 = await lat(); await p.evaluate(() => { document.getElementById("menu").scrollTop = 9999; }); await p.waitForTimeout(150); const a2 = await lat();
+      if (a1.lscroll > 1) errores.push(w + " la barra lateral entera se desplaza (debe desplazarse solo el menú): " + JSON.stringify(a1));
+      if (a1.mscroll <= 0) errores.push(w + " con poca altura el menú no se desplaza por sí solo: " + JSON.stringify(a1));
+      if (a1.uBottom > a1.alto || a2.uTop !== a1.uTop || a2.kTop !== a1.kTop) errores.push(w + " la cuenta o el logo se mueven con el menú: " + JSON.stringify([a1, a2]));
+      await p.setViewportSize({ width: w, height: 900 }); await p.waitForTimeout(200);
+    }
     // v9.3 · Riverino: botón, búsqueda, «Llévame», recorrido de bienvenida y consejos de primera vez
     await p.waitForSelector("#riverino", { timeout: 6000 }).catch(() => errores.push(w + " no aparece el botón de Riverino"));
     await p.click("#riverino"); await p.waitForSelector("#rvPanel", { timeout: 4000 }).catch(() => errores.push(w + " Riverino no abre su panel"));
